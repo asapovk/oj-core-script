@@ -1,0 +1,16 @@
+type Serie {
+  serieId: Int!
+  movieId: Int!
+  title: String!
+  imageUrl: String
+  isScriptVerified: Boolean! 
+
+  videoUrl: String
+  description: String
+  script: String
+  ruScript: String
+  scriptId: Int
+  likes: Int!
+  views: Int!
+  isLiked: Boolean 
+}

@@ -1,0 +1,6 @@
+
+
+export const  AuthErrors =  {
+     SESSION_NOT_FOUND: 'SESSION_NOT_FOUND',
+     AUTH_SYSTEM_ERROR: 'AUTH_SYSTEM_ERROR',
+}

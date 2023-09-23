@@ -1,0 +1,13 @@
+#import * from "Types.graphql";
+#import * from "Inputs.graphql";
+
+type Query {
+    singleSerie (input: SingleSerieInput!) : [Serie!]!
+}   
+
+type Mutation {
+    updateScript ( input: UpdateScriptInput!): Boolean!
+    updateSerie ( input: UpdateSerieInput!) : Boolean!
+}
+
+

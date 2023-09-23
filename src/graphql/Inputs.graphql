@@ -1,0 +1,21 @@
+input SingleSerieInput {
+    serieId: Int!
+}
+
+input UpdateSerieInput {
+    userId: String!
+    serieId: Int!
+
+    title: String
+    videoUrl: String
+    imageUrl: String
+    description: String
+    script: String
+
+    scriptId: Int ## should be provided in script provided
+}
+
+input UpdateScriptInput {
+    body: String!
+    serieId: Int!
+}
