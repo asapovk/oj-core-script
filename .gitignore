@@ -3,5 +3,5 @@ node_modules
 dist
 test
 migrations
-scripts
-__boostorm
+entities.d.ts
+dbSchema.json
