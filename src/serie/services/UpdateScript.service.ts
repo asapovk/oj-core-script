@@ -10,6 +10,27 @@ export class UpdateScriptService {
 
     constructor(private opts: ScriptOptsType<ISerireTriggers, ITriggers, IState, 'updateScript'>) {}
     private requestId: string;
+    private err: string = null;
+
+    private endError(err: string) {
+        this.opts.setStatus('done', {
+
+            'err': err,
+            'requestId': this.requestId,
+            'ok': !Boolean(this.err)
+        })
+        this.opts.drop()
+    }
+
+    private endSuccess() {
+        this.opts.setStatus('done', {
+            'err': this.err,
+            'requestId': this.requestId,
+            'ok': !Boolean(this.err)
+        })
+        this.opts.drop()
+    }
+
 
     private async check(sessionId: string) {
         const res = await appStore.hook('getUser', 'start', 'done', {
@@ -19,16 +40,25 @@ export class UpdateScriptService {
             requestId: this.requestId,
         })
         if(!res.ok) {
-            // console.log("NOT OK")
-            // this.opts.setStatus('done', {
-            //     'ok': false,
-            //     requestId: this.requestId,
-            //     'err': res.err,
-            // })
+            this.opts.setStatus('done', {
+                'ok': false,
+                requestId: this.requestId,
+                'err': res.err,
+            })
+            this.opts.drop();
         }
-        //this.opts.drop();
 
         return res;
+    }
+    private async createScriptUpdate(userId: number, scriptId: number, body: JSON) {
+        return await rootRep.insert({
+            'table': 'script_update',
+            params: {
+                'id_script_processed': scriptId,
+                'id_user': userId,
+                'script_body': body
+            }
+        })
     }
 
     public async init(args: ScriptInitArgsType<ITriggers, 'updateScript', 'start'>) {
@@ -53,46 +83,30 @@ export class UpdateScriptService {
             let body  = null;
             try {
                 body = JSON.parse(args.input.script);
-                console.log('good');
             } catch (error) {
-                console.log('not good');
-                err = 'INVALID_JSON_BODY'
+                this.endError(SerieErorrs.SERIE_SCRIPT_NOT_PROVIDED) 
+                return
             }
             if(body) {
-                const res = await rootRep.insert({
-                    'table': 'script_update',
-                    params: {
-                        'id_script_processed': script_Id,
-                        'id_user': authRes.data.user_id,
-                        'script_body': body
-                    }
-                })
+                const res =  await this.createScriptUpdate(authRes.data.user_id,script_Id, body)
                 if(res) {
-                    ok = true;
+                    this.endSuccess()
+                    return
                  }
-                 else {
-                     err = `${SerieErorrs.SERIE_NOT_FOUND}`
-                 }
+                 this.endError(SerieErorrs.SERIE_NOT_FOUND) 
+                 return
             }
+            this.endError(SerieErorrs.SERIE_SCRIPT_NOT_PROVIDED) 
+            return
         }
         else {
-            err = `${SerieErorrs.SERIE_SYSTEM_ERR}`
+            this.endError(SerieErorrs.SERIE_SYSTEM_ERR) 
+            return
         }
         } catch (err) {
-            err = `${SerieErorrs.SERIE_SYSTEM_ERR}`
-        }
-        finally {
-            console.log("SET DONE!")
-            this.opts.setStatus('done', {
-                requestId: args.requestId,
-                'err': err,
-                'ok': ok
-            })
-            this.opts.drop();
+            this.endError(SerieErorrs.SERIE_SYSTEM_ERR) 
+            return
         }
     }   
 
-    public update(args) {
-    
-    }
 }

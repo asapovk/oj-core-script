@@ -23,7 +23,7 @@ app.use(compression());
 
 //Start listening at API endpoints
 
-const configPath = path.join(__dirname, '../config/local.json')
+const configPath = path.join(__dirname, '../config/production.json')
 const config = require(configPath)
 
 const apolloServer = new ApolloServer({

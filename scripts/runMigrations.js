@@ -13,7 +13,7 @@ const Client = pg.Client;
 
 const migrations = require(path.resolve(cwd(), 'migrations/indexs.js'));
 const migrationsHistory = require(path.resolve(cwd(), 'migrations/history.json'));
-const dbConfigs = require(path.resolve(cwd(), 'config/local.json'));
+const dbConfigs = require(path.resolve(cwd(), 'config/production.json'));
 
 async function run() {
     const client = new Client(dbConfigs.ormconfig.connection)
