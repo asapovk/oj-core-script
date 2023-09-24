@@ -61,6 +61,16 @@ export class UpdateScriptService {
         })
     }
 
+    private async getScript(serieId: number) {
+        return await rootRep.fetch({
+            'table': 'scripts_processed',
+                'limit': 1,
+                'offset': 0,
+                'where': {
+                    'serie_id': serieId
+                }
+        })
+    }
     public async init(args: ScriptInitArgsType<ITriggers, 'updateScript', 'start'>) {
         this.requestId = args.requestId;
         const authRes = await this.check(args.sessionId);
@@ -70,14 +80,7 @@ export class UpdateScriptService {
         let err: string = null;
         let ok: boolean = false;
         try {
-            const scripts: Array<_ScriptsProcessed> = await rootRep.fetch({
-                'table': 'scripts_processed',
-                'limit': 1,
-                'offset': 0,
-                'where': {
-                    'serie_id': args.input.serie_id
-                }
-            });
+            const scripts: Array<_ScriptsProcessed> = await this.getScript(args.input.serie_id)
             if(scripts.length) {
             const script_Id: number = scripts[0].script_id;
             let body  = null;
