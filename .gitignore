@@ -1,7 +1,8 @@
-config
 node_modules
 dist
 test
 migrations
 entities.d.ts
+local.json
+production.json
 dbSchema.json
