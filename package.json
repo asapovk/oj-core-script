@@ -4,10 +4,9 @@
     "description": "Editor backend",
     "main": "index",
     "scripts": {
-        "fork": "NODE_PATH=node_modules/ pm2 start dist --name do-stats --update-env -- -env env/prod",
-        "model": "node ./scripts/loadDbSchema.js",
+        "fork": "NODE_PATH=node_modules/ pm2 start dist --name oj-core-script",
         "migrate": "node ./scripts/runMigrations.js",
-        "start": "ts-node ./src/index.ts -env env/local",
+        "start": "node dist/index.js",
         "build": "tsc --p src/tsconfig.json && cp -R ./src/graphql/*.graphql ./dist/graphql &&   cp -R ./src/__boostorm/*.json ./dist/__boostorm",
         "schema": "node scripts/boostorm/schema.js",
         "return": "ts-node scripts/boostorm/return.ts",
