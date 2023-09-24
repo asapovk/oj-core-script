@@ -11,4 +11,10 @@ Then run the script to pull DB schema to generate entities for ORM
 yarn schema
 
 ```
+When update Graphql schema do not forget to gen types form it
+
+```bash
+yarn codegen
+
+```
 
