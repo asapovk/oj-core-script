@@ -6,3 +6,4 @@ entities.d.ts
 local.json
 production.json
 dbSchema.json
+script_body.json
