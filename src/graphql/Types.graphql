@@ -14,3 +14,18 @@ type Serie {
   views: Int!
   isLiked: Boolean 
 }
+
+type WordStampsGroup {
+  serieId: Int!
+  moviedId: Int!
+  title: String!
+  wordStamps: [WordStamp!]!
+}
+
+type WordStamp {
+  wordStampId: Int!
+  writing: String!
+  kana: String!
+  translation: String!
+  transcription: String! 
+}

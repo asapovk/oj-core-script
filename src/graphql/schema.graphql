@@ -3,6 +3,7 @@
 
 type Query {
     singleSerie (input: SingleSerieInput!) : [Serie!]!
+    loadGroupedWordStamps: [WordStampsGroup!]!
 }   
 
 type Mutation {

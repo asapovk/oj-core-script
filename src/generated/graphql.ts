@@ -34,6 +34,7 @@ export type MutationUpdateSerieArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  loadGroupedWordStamps: Array<WordStampsGroup>;
   singleSerie: Array<Serie>;
 };
 
@@ -77,6 +78,23 @@ export type UpdateSerieInput = {
   title?: InputMaybe<Scalars['String']['input']>;
   userId: Scalars['String']['input'];
   videoUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type WordStamp = {
+  __typename?: 'WordStamp';
+  kana: Scalars['String']['output'];
+  transcription: Scalars['String']['output'];
+  translation: Scalars['String']['output'];
+  wordStampId: Scalars['Int']['output'];
+  writing: Scalars['String']['output'];
+};
+
+export type WordStampsGroup = {
+  __typename?: 'WordStampsGroup';
+  moviedId: Scalars['Int']['output'];
+  serieId: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+  wordStamps: Array<WordStamp>;
 };
 
 
@@ -171,6 +189,8 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   UpdateScriptInput: UpdateScriptInput;
   UpdateSerieInput: UpdateSerieInput;
+  WordStamp: ResolverTypeWrapper<WordStamp>;
+  WordStampsGroup: ResolverTypeWrapper<WordStampsGroup>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -184,6 +204,8 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   UpdateScriptInput: UpdateScriptInput;
   UpdateSerieInput: UpdateSerieInput;
+  WordStamp: WordStamp;
+  WordStampsGroup: WordStampsGroup;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -192,6 +214,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  loadGroupedWordStamps?: Resolver<Array<ResolversTypes['WordStampsGroup']>, ParentType, ContextType>;
   singleSerie?: Resolver<Array<ResolversTypes['Serie']>, ParentType, ContextType, RequireFields<QuerySingleSerieArgs, 'input'>>;
 };
 
@@ -212,10 +235,29 @@ export type SerieResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type WordStampResolvers<ContextType = any, ParentType extends ResolversParentTypes['WordStamp'] = ResolversParentTypes['WordStamp']> = {
+  kana?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  transcription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  translation?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  wordStampId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  writing?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type WordStampsGroupResolvers<ContextType = any, ParentType extends ResolversParentTypes['WordStampsGroup'] = ResolversParentTypes['WordStampsGroup']> = {
+  moviedId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  serieId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  wordStamps?: Resolver<Array<ResolversTypes['WordStamp']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Serie?: SerieResolvers<ContextType>;
+  WordStamp?: WordStampResolvers<ContextType>;
+  WordStampsGroup?: WordStampsGroupResolvers<ContextType>;
 };
 
 
