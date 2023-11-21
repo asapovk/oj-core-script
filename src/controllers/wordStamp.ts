@@ -26,6 +26,7 @@ class WordStampController extends Controller {
                     wordStampId: ws.word_stamp_id,
                     writing: ws.writing,
                     kana: ws.kana,
+                    chapterId: ws.chapter_id,
                     translation: ws.primary_translation,
                     transcription: ws.transcription,                
                    })),

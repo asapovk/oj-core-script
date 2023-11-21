@@ -24,8 +24,14 @@ type WordStampsGroup {
 
 type WordStamp {
   wordStampId: Int!
+  chapterId: Int!
   writing: String!
   kana: String!
   translation: String!
   transcription: String! 
+}
+
+type Authenticate {
+  session: String
+  errorCode: Int
 }

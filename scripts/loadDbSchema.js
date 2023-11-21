@@ -32,7 +32,7 @@ const Client = pg.Client;
 
 
 async function run() {
-    const dbConfigs = require(path.resolve(process.cwd(), 'config/local.json'));
+    const dbConfigs = require(path.resolve(process.cwd(), 'config/production.json'));
     console.log(dbConfigs);
     console.log('run');
     const client = new Client(dbConfigs.ormconfig.connection)

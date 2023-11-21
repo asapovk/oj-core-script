@@ -23,6 +23,17 @@ export interface IAuthTriggers {
             err: string
         };
    }>;
+   getSession: TriggerPhaseWrapper<{
+    start: {
+        requestId: string
+        input: { session_uuid: string}
+    };
+    done: {
+        ok: boolean,
+        requestId: string
+        data: _Users
+        err: string
+    };>
 }
 
 export interface IAuthState {

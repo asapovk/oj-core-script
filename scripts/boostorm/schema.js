@@ -4,7 +4,7 @@ const fs = require('fs');
 
 
 
-const config = require('../../config/local.json');
+const config = require('../../config/production.json');
 const Client = pg.Client;
 
 async function run() {

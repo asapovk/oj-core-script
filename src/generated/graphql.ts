@@ -16,6 +16,18 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Authenticate = {
+  __typename?: 'Authenticate';
+  errorCode?: Maybe<Scalars['Int']['output']>;
+  session?: Maybe<Scalars['String']['output']>;
+};
+
+export type AuthenticateInput = {
+  link: Scalars['String']['input'];
+  login?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   updateScript: Scalars['Boolean']['output'];
@@ -34,8 +46,14 @@ export type MutationUpdateSerieArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  authenticate: Authenticate;
   loadGroupedWordStamps: Array<WordStampsGroup>;
   singleSerie: Array<Serie>;
+};
+
+
+export type QueryAuthenticateArgs = {
+  input: AuthenticateInput;
 };
 
 
@@ -82,6 +100,7 @@ export type UpdateSerieInput = {
 
 export type WordStamp = {
   __typename?: 'WordStamp';
+  chapterId: Scalars['Int']['output'];
   kana: Scalars['String']['output'];
   transcription: Scalars['String']['output'];
   translation: Scalars['String']['output'];
@@ -180,6 +199,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Authenticate: ResolverTypeWrapper<Authenticate>;
+  AuthenticateInput: AuthenticateInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -195,6 +216,8 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Authenticate: Authenticate;
+  AuthenticateInput: AuthenticateInput;
   Boolean: Scalars['Boolean'];
   Int: Scalars['Int'];
   Mutation: {};
@@ -208,12 +231,19 @@ export type ResolversParentTypes = {
   WordStampsGroup: WordStampsGroup;
 };
 
+export type AuthenticateResolvers<ContextType = any, ParentType extends ResolversParentTypes['Authenticate'] = ResolversParentTypes['Authenticate']> = {
+  errorCode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  session?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   updateScript?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateScriptArgs, 'input'>>;
   updateSerie?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateSerieArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  authenticate?: Resolver<ResolversTypes['Authenticate'], ParentType, ContextType, RequireFields<QueryAuthenticateArgs, 'input'>>;
   loadGroupedWordStamps?: Resolver<Array<ResolversTypes['WordStampsGroup']>, ParentType, ContextType>;
   singleSerie?: Resolver<Array<ResolversTypes['Serie']>, ParentType, ContextType, RequireFields<QuerySingleSerieArgs, 'input'>>;
 };
@@ -236,6 +266,7 @@ export type SerieResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type WordStampResolvers<ContextType = any, ParentType extends ResolversParentTypes['WordStamp'] = ResolversParentTypes['WordStamp']> = {
+  chapterId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   kana?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   transcription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   translation?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -253,6 +284,7 @@ export type WordStampsGroupResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type Resolvers<ContextType = any> = {
+  Authenticate?: AuthenticateResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Serie?: SerieResolvers<ContextType>;

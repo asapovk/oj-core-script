@@ -19,3 +19,9 @@ input UpdateScriptInput {
     body: String!
     serieId: Int!
 }
+
+input AuthenticateInput {
+    link: String!
+    login: String
+    password: String
+}
