@@ -9,10 +9,24 @@ class AuthController extends Controller {
     }
     makeQuery = (q: Query) => {
         this.createQueryResolver('authenticate', async (args: QueryAuthenticateArgs, auth: string) => {
-
-            return {
-                session: '1'
+            const requestId = v4();
+            const res =  await appStore.hook('authenticateLink', 'start', 'done', {
+                requestId,
+                input: {
+                    'link_session': auth,
+                    'link_value': args.input.link,
+                    'serieId': 1024
+                },
+            })
+            if(res.ok) {
+                return {
+                    session: res.data.session_value
+                }
             }
+            else {
+                throw Error(res.err)
+            }
+        
 
         },(args) => args.headers.authorization)
     }

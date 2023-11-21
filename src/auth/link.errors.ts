@@ -1,0 +1,8 @@
+
+
+export const  linkErrors =  {
+    INVALID_LINK: 'INVALID_LINK',
+    INVALID_SESSION: 'INVALID_SESSION',
+    LINK_SYSTEM_ERR: 'LINK_SYSTEM_ERR',
+    LINK_EXIRED: 'LINK_EXIRED',
+}
