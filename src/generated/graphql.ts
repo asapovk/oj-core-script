@@ -26,6 +26,7 @@ export type AuthenticateInput = {
   link: Scalars['String']['input'];
   login?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
+  serieId: Scalars['Int']['input'];
 };
 
 export type Mutation = {

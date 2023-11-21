@@ -15,7 +15,7 @@ class AuthController extends Controller {
                 input: {
                     'link_session': auth,
                     'link_value': args.input.link,
-                    'serieId': 1024
+                    'serieId': args.input.serieId,
                 },
             })
             if(res.ok) {
@@ -26,8 +26,6 @@ class AuthController extends Controller {
             else {
                 throw Error(res.err)
             }
-        
-
         },(args) => args.headers.authorization)
     }
 }
