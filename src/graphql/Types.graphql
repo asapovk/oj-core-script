@@ -35,3 +35,11 @@ type Authenticate {
   session: String
   errorCode: Int
 }
+
+type Chapter {
+    chapterId: Int!
+    serieId: Int!
+    chapterContent: String!
+    audioUrl: String
+    isTop: Boolean!
+}

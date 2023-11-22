@@ -26,3 +26,7 @@ input AuthenticateInput {
     login: String
     password: String
 }
+
+input ChaptersInput {
+    chapterIds: [Int!]!
+}

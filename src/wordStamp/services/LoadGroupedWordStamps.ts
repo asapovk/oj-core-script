@@ -92,6 +92,7 @@ export class LoadGroupedWordStamps {
         this.requestId = args.requestId;
         const authRes = await this.check(args.sessionId);
         if(!authRes.data) {
+            this.endError('WRONG_SESION');
             return
         }
 

@@ -5,6 +5,7 @@ type Query {
     singleSerie (input: SingleSerieInput!) : [Serie!]!
     loadGroupedWordStamps: [WordStampsGroup!]!
     authenticate (input: AuthenticateInput! ) : Authenticate! 
+    chapters (input: ChaptersInput!): [Chapter!]!
 }   
 
 type Mutation {

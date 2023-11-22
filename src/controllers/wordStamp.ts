@@ -1,5 +1,5 @@
 import Controller from './controller'
-import {Mutation, MutationUpdateScriptArgs, Query, QuerySingleSerieArgs } from '../generated/graphql'
+import {Mutation, MutationUpdateScriptArgs, Query, QueryChaptersArgs, QuerySingleSerieArgs } from '../generated/graphql'
 import appStore from '../_redux/app-store'
 import {v4} from 'uuid'
 
@@ -30,6 +30,25 @@ class WordStampController extends Controller {
                     translation: ws.primary_translation,
                     transcription: ws.transcription,                
                    })),
+                }))
+            }
+            else {
+                throw Error(res.err);
+            }
+        },(args) => args.headers.authorization)
+        this.createQueryResolver('chapters', async (args: QueryChaptersArgs) => {
+            const requestId = v4();
+            const res =  await appStore.hook('loadChaptersOfStamps', 'start', 'done', {
+                requestId,
+                input: args.input.chapterIds
+            })
+            if(res.ok) {
+                return res.data.map(d => ({
+                    'audioUrl': d.audio_url,
+                    'chapterContent': d.chapter_content,
+                    'chapterId': d.chapter_id,
+                    'serieId': d.serie_id,
+                    'isTop': d.is_top
                 }))
             }
             else {

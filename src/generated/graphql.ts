@@ -29,6 +29,19 @@ export type AuthenticateInput = {
   serieId: Scalars['Int']['input'];
 };
 
+export type Chapter = {
+  __typename?: 'Chapter';
+  audioUrl?: Maybe<Scalars['String']['output']>;
+  chapterContent: Scalars['String']['output'];
+  chapterId: Scalars['Int']['output'];
+  isTop: Scalars['Boolean']['output'];
+  serieId: Scalars['Int']['output'];
+};
+
+export type ChaptersInput = {
+  chapterIds: Array<Scalars['Int']['input']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   updateScript: Scalars['Boolean']['output'];
@@ -48,6 +61,7 @@ export type MutationUpdateSerieArgs = {
 export type Query = {
   __typename?: 'Query';
   authenticate: Authenticate;
+  chapters: Array<Chapter>;
   loadGroupedWordStamps: Array<WordStampsGroup>;
   singleSerie: Array<Serie>;
 };
@@ -55,6 +69,11 @@ export type Query = {
 
 export type QueryAuthenticateArgs = {
   input: AuthenticateInput;
+};
+
+
+export type QueryChaptersArgs = {
+  input: ChaptersInput;
 };
 
 
@@ -203,6 +222,8 @@ export type ResolversTypes = {
   Authenticate: ResolverTypeWrapper<Authenticate>;
   AuthenticateInput: AuthenticateInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Chapter: ResolverTypeWrapper<Chapter>;
+  ChaptersInput: ChaptersInput;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -220,6 +241,8 @@ export type ResolversParentTypes = {
   Authenticate: Authenticate;
   AuthenticateInput: AuthenticateInput;
   Boolean: Scalars['Boolean'];
+  Chapter: Chapter;
+  ChaptersInput: ChaptersInput;
   Int: Scalars['Int'];
   Mutation: {};
   Query: {};
@@ -238,6 +261,15 @@ export type AuthenticateResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ChapterResolvers<ContextType = any, ParentType extends ResolversParentTypes['Chapter'] = ResolversParentTypes['Chapter']> = {
+  audioUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  chapterContent?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  chapterId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  isTop?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  serieId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   updateScript?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateScriptArgs, 'input'>>;
   updateSerie?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateSerieArgs, 'input'>>;
@@ -245,6 +277,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   authenticate?: Resolver<ResolversTypes['Authenticate'], ParentType, ContextType, RequireFields<QueryAuthenticateArgs, 'input'>>;
+  chapters?: Resolver<Array<ResolversTypes['Chapter']>, ParentType, ContextType, RequireFields<QueryChaptersArgs, 'input'>>;
   loadGroupedWordStamps?: Resolver<Array<ResolversTypes['WordStampsGroup']>, ParentType, ContextType>;
   singleSerie?: Resolver<Array<ResolversTypes['Serie']>, ParentType, ContextType, RequireFields<QuerySingleSerieArgs, 'input'>>;
 };
@@ -286,6 +319,7 @@ export type WordStampsGroupResolvers<ContextType = any, ParentType extends Resol
 
 export type Resolvers<ContextType = any> = {
   Authenticate?: AuthenticateResolvers<ContextType>;
+  Chapter?: ChapterResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Serie?: SerieResolvers<ContextType>;
