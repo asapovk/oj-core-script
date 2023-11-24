@@ -28,7 +28,9 @@ type WordStamp {
   writing: String!
   kana: String!
   translation: String!
-  transcription: String! 
+  transcription: String!
+  levelOfKnowledge: Int!
+  numberOfTests: Int!
 }
 
 type Authenticate {

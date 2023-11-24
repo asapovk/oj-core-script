@@ -122,6 +122,8 @@ export type WordStamp = {
   __typename?: 'WordStamp';
   chapterId: Scalars['Int']['output'];
   kana: Scalars['String']['output'];
+  levelOfKnowledge: Scalars['Int']['output'];
+  numberOfTests: Scalars['Int']['output'];
   transcription: Scalars['String']['output'];
   translation: Scalars['String']['output'];
   wordStampId: Scalars['Int']['output'];
@@ -302,6 +304,8 @@ export type SerieResolvers<ContextType = any, ParentType extends ResolversParent
 export type WordStampResolvers<ContextType = any, ParentType extends ResolversParentTypes['WordStamp'] = ResolversParentTypes['WordStamp']> = {
   chapterId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   kana?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  levelOfKnowledge?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  numberOfTests?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   transcription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   translation?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   wordStampId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;

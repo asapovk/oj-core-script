@@ -28,7 +28,9 @@ class WordStampController extends Controller {
                     kana: ws.kana,
                     chapterId: ws.chapter_id,
                     translation: ws.primary_translation,
-                    transcription: ws.transcription,                
+                    transcription: ws.transcription, 
+                    levelOfKnowledge: ws.number_of_tests,
+                    numberOfTests: ws.knowledge_level,              
                    })),
                 }))
             }
