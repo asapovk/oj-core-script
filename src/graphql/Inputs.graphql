@@ -22,11 +22,17 @@ input UpdateScriptInput {
 
 input AuthenticateInput {
     link: String!
-    serieId: Int!
     login: String
     password: String
 }
 
 input ChaptersInput {
     chapterIds: [Int!]!
+}
+
+input CreatePublicLinkInput {
+    serieId: Int!
+    start: String
+    end: String
+    linkValue: String!
 }

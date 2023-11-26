@@ -35,7 +35,15 @@ type WordStamp {
 
 type Authenticate {
   session: String
-  errorCode: Int
+  data: PublicLinkData
+  errorCode: String
+}
+
+type PublicLinkData {
+  linkValue: String!
+  serieId: Int!
+  start: String
+  end: String
 }
 
 type Chapter {
@@ -44,4 +52,9 @@ type Chapter {
     chapterContent: String!
     audioUrl: String
     isTop: Boolean!
+}
+
+type CreatePublicLink {
+    data: Int 
+    errorCode: String
 }

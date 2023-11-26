@@ -18,7 +18,8 @@ export type Scalars = {
 
 export type Authenticate = {
   __typename?: 'Authenticate';
-  errorCode?: Maybe<Scalars['Int']['output']>;
+  data?: Maybe<PublicLinkData>;
+  errorCode?: Maybe<Scalars['String']['output']>;
   session?: Maybe<Scalars['String']['output']>;
 };
 
@@ -26,7 +27,6 @@ export type AuthenticateInput = {
   link: Scalars['String']['input'];
   login?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
-  serieId: Scalars['Int']['input'];
 };
 
 export type Chapter = {
@@ -42,10 +42,29 @@ export type ChaptersInput = {
   chapterIds: Array<Scalars['Int']['input']>;
 };
 
+export type CreatePublicLink = {
+  __typename?: 'CreatePublicLink';
+  data?: Maybe<Scalars['Int']['output']>;
+  errorCode?: Maybe<Scalars['String']['output']>;
+};
+
+export type CreatePublicLinkInput = {
+  end?: InputMaybe<Scalars['String']['input']>;
+  linkValue: Scalars['String']['input'];
+  serieId: Scalars['Int']['input'];
+  start?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createPublicLink: CreatePublicLink;
   updateScript: Scalars['Boolean']['output'];
   updateSerie: Scalars['Boolean']['output'];
+};
+
+
+export type MutationCreatePublicLinkArgs = {
+  input: CreatePublicLinkInput;
 };
 
 
@@ -56,6 +75,14 @@ export type MutationUpdateScriptArgs = {
 
 export type MutationUpdateSerieArgs = {
   input: UpdateSerieInput;
+};
+
+export type PublicLinkData = {
+  __typename?: 'PublicLinkData';
+  end?: Maybe<Scalars['String']['output']>;
+  linkValue: Scalars['String']['output'];
+  serieId: Scalars['Int']['output'];
+  start?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
@@ -226,8 +253,11 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Chapter: ResolverTypeWrapper<Chapter>;
   ChaptersInput: ChaptersInput;
+  CreatePublicLink: ResolverTypeWrapper<CreatePublicLink>;
+  CreatePublicLinkInput: CreatePublicLinkInput;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
+  PublicLinkData: ResolverTypeWrapper<PublicLinkData>;
   Query: ResolverTypeWrapper<{}>;
   Serie: ResolverTypeWrapper<Serie>;
   SingleSerieInput: SingleSerieInput;
@@ -245,8 +275,11 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Chapter: Chapter;
   ChaptersInput: ChaptersInput;
+  CreatePublicLink: CreatePublicLink;
+  CreatePublicLinkInput: CreatePublicLinkInput;
   Int: Scalars['Int'];
   Mutation: {};
+  PublicLinkData: PublicLinkData;
   Query: {};
   Serie: Serie;
   SingleSerieInput: SingleSerieInput;
@@ -258,7 +291,8 @@ export type ResolversParentTypes = {
 };
 
 export type AuthenticateResolvers<ContextType = any, ParentType extends ResolversParentTypes['Authenticate'] = ResolversParentTypes['Authenticate']> = {
-  errorCode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes['PublicLinkData']>, ParentType, ContextType>;
+  errorCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   session?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -272,9 +306,24 @@ export type ChapterResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CreatePublicLinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatePublicLink'] = ResolversParentTypes['CreatePublicLink']> = {
+  data?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  errorCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createPublicLink?: Resolver<ResolversTypes['CreatePublicLink'], ParentType, ContextType, RequireFields<MutationCreatePublicLinkArgs, 'input'>>;
   updateScript?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateScriptArgs, 'input'>>;
   updateSerie?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateSerieArgs, 'input'>>;
+};
+
+export type PublicLinkDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicLinkData'] = ResolversParentTypes['PublicLinkData']> = {
+  end?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  linkValue?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  serieId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  start?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -324,7 +373,9 @@ export type WordStampsGroupResolvers<ContextType = any, ParentType extends Resol
 export type Resolvers<ContextType = any> = {
   Authenticate?: AuthenticateResolvers<ContextType>;
   Chapter?: ChapterResolvers<ContextType>;
+  CreatePublicLink?: CreatePublicLinkResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  PublicLinkData?: PublicLinkDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Serie?: SerieResolvers<ContextType>;
   WordStamp?: WordStampResolvers<ContextType>;

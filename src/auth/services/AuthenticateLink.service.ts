@@ -10,6 +10,14 @@ import uuid from "uuid";
 import { linkErrors } from "../link.errors";
 
 
+export interface AuthenticateReturn_ {
+    publicLinkDtExprire: Date | null,
+    publicLinkStartSecond: string | null,
+    publicLinkEndSecond: string | null,
+    publicLinkIdSerie: number,
+    publicLinkSessionSessionValue: string
+}
+
 export class AuthenticateLinkService {
 
     //getSerieByLink
@@ -19,7 +27,7 @@ export class AuthenticateLinkService {
     
     private requestId: string;
     private err: string;
-    private data: _PublicLinkSession;
+    private data: AuthenticateReturn_;
 
     private end() {
         this.opts.setStatus('done', {
@@ -32,8 +40,6 @@ export class AuthenticateLinkService {
     }
 
     public async init(args: ScriptInitArgsType<IAuthTriggers, 'authenticateLink', 'start'>) {
-    let data: _PublicLinkSession = null;
-    let err: string | null = null; 
     this.requestId = args.requestId;
     
     if(args.input.link_session) {
@@ -42,10 +48,9 @@ export class AuthenticateLinkService {
             'from': 'public_link',
             where: {
                 'link_value': args.input.link_value,
-                'id_serie': args.input.serieId,
             },
             select: {
-                'columns': ['dt_exprire']
+                'columns': ['dt_exprire', 'start_second', 'end_second', 'id_serie']
             },
             'join': {
                 'public_link_session': {
@@ -72,9 +77,7 @@ export class AuthenticateLinkService {
                     this.err = linkErrors.LINK_EXIRED;
                     this.end();
                 };
-                this.data = {
-                    'session_value': res[0].publicLinkSessionSessionValue,
-                } as any
+                this.data = res[0]
                 
             }
             this.end();
