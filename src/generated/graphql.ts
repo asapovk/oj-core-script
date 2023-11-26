@@ -80,8 +80,8 @@ export type MutationUpdateSerieArgs = {
 export type PublicLinkData = {
   __typename?: 'PublicLinkData';
   end?: Maybe<Scalars['String']['output']>;
-  linkValue: Scalars['String']['output'];
-  serieId: Scalars['Int']['output'];
+  linkValue?: Maybe<Scalars['String']['output']>;
+  serieId?: Maybe<Scalars['Int']['output']>;
   start?: Maybe<Scalars['String']['output']>;
 };
 
@@ -320,8 +320,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type PublicLinkDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicLinkData'] = ResolversParentTypes['PublicLinkData']> = {
   end?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  linkValue?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  serieId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  linkValue?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  serieId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   start?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

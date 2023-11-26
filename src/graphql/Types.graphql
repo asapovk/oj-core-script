@@ -40,8 +40,8 @@ type Authenticate {
 }
 
 type PublicLinkData {
-  linkValue: String!
-  serieId: Int!
+  linkValue: String
+  serieId: Int
   start: String
   end: String
 }

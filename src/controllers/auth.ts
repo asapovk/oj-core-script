@@ -36,13 +36,13 @@ class AuthController extends Controller {
                 },
             })
                 return {
-                    session: res.data.publicLinkSessionSessionValue,
-                    data: {
+                    session:   res.data ? res.data.publicLinkSessionSessionValue:  null,
+                    data:  res.ok ? {
                         'end': res.data.publicLinkEndSecond,
                         'start': res.data.publicLinkStartSecond,
                         'linkValue': '1',
                         'serieId': res.data.publicLinkIdSerie,
-                    },
+                    }: null,
                     errorCode: res.err
                 }
             
