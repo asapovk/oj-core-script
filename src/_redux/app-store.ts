@@ -32,7 +32,7 @@ class AppStore {
   private addWait = (trigger: string, {resolve, reject}, timeout) => {
     const timeOutId = setTimeout(()=> {
       if(this.waits[trigger]) {
-         this.waits[trigger].reject(`${trigger} TIMEOUT`)
+         this.waits[trigger].resolve(`${trigger} TIMEOUT`)
       } 
     }, timeout || 15000)
     this.waits[trigger] = {resolve, reject, id: timeOutId}
