@@ -6,6 +6,7 @@ type Query {
     loadGroupedWordStamps: [WordStampsGroup!]!
     authenticate (input: AuthenticateInput! ) : Authenticate! 
     chapters (input: ChaptersInput!): [Chapter!]!
+    signIn (input: SignInInput!): SignInResult!
 }   
 
 type Mutation {

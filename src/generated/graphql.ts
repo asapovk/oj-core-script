@@ -90,6 +90,7 @@ export type Query = {
   authenticate: Authenticate;
   chapters: Array<Chapter>;
   loadGroupedWordStamps: Array<WordStampsGroup>;
+  signIn: SignInResult;
   singleSerie: Array<Serie>;
 };
 
@@ -101,6 +102,11 @@ export type QueryAuthenticateArgs = {
 
 export type QueryChaptersArgs = {
   input: ChaptersInput;
+};
+
+
+export type QuerySignInArgs = {
+  input: SignInInput;
 };
 
 
@@ -123,6 +129,17 @@ export type Serie = {
   title: Scalars['String']['output'];
   videoUrl?: Maybe<Scalars['String']['output']>;
   views: Scalars['Int']['output'];
+};
+
+export type SignInInput = {
+  login: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type SignInResult = {
+  __typename?: 'SignInResult';
+  errorCode?: Maybe<Scalars['String']['output']>;
+  session?: Maybe<Scalars['String']['output']>;
 };
 
 export type SingleSerieInput = {
@@ -260,6 +277,8 @@ export type ResolversTypes = {
   PublicLinkData: ResolverTypeWrapper<PublicLinkData>;
   Query: ResolverTypeWrapper<{}>;
   Serie: ResolverTypeWrapper<Serie>;
+  SignInInput: SignInInput;
+  SignInResult: ResolverTypeWrapper<SignInResult>;
   SingleSerieInput: SingleSerieInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   UpdateScriptInput: UpdateScriptInput;
@@ -282,6 +301,8 @@ export type ResolversParentTypes = {
   PublicLinkData: PublicLinkData;
   Query: {};
   Serie: Serie;
+  SignInInput: SignInInput;
+  SignInResult: SignInResult;
   SingleSerieInput: SingleSerieInput;
   String: Scalars['String'];
   UpdateScriptInput: UpdateScriptInput;
@@ -330,6 +351,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   authenticate?: Resolver<ResolversTypes['Authenticate'], ParentType, ContextType, RequireFields<QueryAuthenticateArgs, 'input'>>;
   chapters?: Resolver<Array<ResolversTypes['Chapter']>, ParentType, ContextType, RequireFields<QueryChaptersArgs, 'input'>>;
   loadGroupedWordStamps?: Resolver<Array<ResolversTypes['WordStampsGroup']>, ParentType, ContextType>;
+  signIn?: Resolver<ResolversTypes['SignInResult'], ParentType, ContextType, RequireFields<QuerySignInArgs, 'input'>>;
   singleSerie?: Resolver<Array<ResolversTypes['Serie']>, ParentType, ContextType, RequireFields<QuerySingleSerieArgs, 'input'>>;
 };
 
@@ -347,6 +369,12 @@ export type SerieResolvers<ContextType = any, ParentType extends ResolversParent
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   videoUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   views?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SignInResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SignInResult'] = ResolversParentTypes['SignInResult']> = {
+  errorCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  session?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -378,6 +406,7 @@ export type Resolvers<ContextType = any> = {
   PublicLinkData?: PublicLinkDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Serie?: SerieResolvers<ContextType>;
+  SignInResult?: SignInResultResolvers<ContextType>;
   WordStamp?: WordStampResolvers<ContextType>;
   WordStampsGroup?: WordStampsGroupResolvers<ContextType>;
 };

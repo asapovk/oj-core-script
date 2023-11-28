@@ -58,3 +58,9 @@ type CreatePublicLink {
     data: Int 
     errorCode: String
 }
+
+
+type SignInResult {
+  session: String
+  errorCode: String
+}

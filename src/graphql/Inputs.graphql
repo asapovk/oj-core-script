@@ -36,3 +36,8 @@ input CreatePublicLinkInput {
     end: String
     linkValue: String!
 }
+
+input SignInInput {
+    login: String!
+    password: String!
+}

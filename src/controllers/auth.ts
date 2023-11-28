@@ -1,5 +1,5 @@
 import Controller from './controller'
-import {Mutation, MutationCreatePublicLinkArgs, MutationUpdateScriptArgs, Query, QueryAuthenticateArgs, QuerySingleSerieArgs } from '../generated/graphql'
+import {Mutation, MutationCreatePublicLinkArgs, MutationUpdateScriptArgs, Query, QueryAuthenticateArgs, QuerySignInArgs, QuerySingleSerieArgs } from '../generated/graphql'
 import appStore from '../_redux/app-store'
 import {v4} from 'uuid'
 
@@ -47,6 +47,21 @@ class AuthController extends Controller {
                 }
             
         },(args) => args.headers.authorization)
+        this.createQueryResolver('signIn', async (args: QuerySignInArgs) => {
+            const requestId = v4();
+            const res =  await appStore.hook('signIn', 'start', 'done', {
+                requestId,
+                input: {
+                    'login': args.input.login,
+                    'password': args.input.password,
+                },
+            })
+                return {
+                    session: res.ok ? res.data.sessionsSessionUuid: null,
+                    errorCode: res.err
+                }
+            
+        })
     }
 }
 

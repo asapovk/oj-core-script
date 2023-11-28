@@ -2,10 +2,11 @@ import { Slice, Bite } from "@reflexio/reflexio-on-redux";
 import { TriggerPhaseWrapper } from "@reflexio/reflexio-on-redux/lib/types";
 import { IState, ITriggers } from "../_redux/types";
 //import { LoadSerieService } from "./services/LoadSerie.service";
-import { _PublicLink, _PublicLinkSession, _Series, _Users } from "../__boostorm/entities";
+import { _PublicLink, _PublicLinkSession, _Series, _Sessions, _Users } from "../__boostorm/entities";
 import { AuthService } from "./Auth.service";
 import { AuthenticateLinkService, AuthenticateReturn_ } from "./services/AuthenticateLink.service";
 import { CreatePublicLinkService } from "./services/CreatePublicLink.service";
+import { SignInReturn_, SignInServiceService } from "./services/SignIn.service";
 
 // load init serie on app start 
 // trigger in controller load serie // save result to state with requestId
@@ -13,6 +14,18 @@ import { CreatePublicLinkService } from "./services/CreatePublicLink.service";
 // clear state
 
 export interface IAuthTriggers {
+    signIn: TriggerPhaseWrapper<{
+        start: {
+            requestId: string
+            input: { login: string; password: string}
+        };
+        done: {
+            ok: boolean,
+            requestId: string
+            data: SignInReturn_
+            err: string
+        };
+   }>;
     getUser: TriggerPhaseWrapper<{
         start: {
             requestId: string
@@ -106,6 +119,19 @@ export const getUserBite = Bite<IAuthTriggers, ITriggers, IAuthState, IState, 'g
 })
 
 
+export const signInkBite = Bite<IAuthTriggers, ITriggers, IAuthState, IState, 'signIn'>({
+    'start': null,
+    done(state, payload) {
+       state.getUser.lastRequest = Date.now();
+    }
+}, {
+   'instance': 'multiple',
+   'triggerStatus': 'start',
+   'updateOn': ['signIn'],
+   'canTrigger': ['signIn'],
+   script: SignInServiceService,
+})
+
 export const createPublicLinkBite = Bite<IAuthTriggers, ITriggers, IAuthState, IState, 'createPublicLink'>({
     'start': null,
     done(state, payload) {
@@ -121,8 +147,10 @@ export const createPublicLinkBite = Bite<IAuthTriggers, ITriggers, IAuthState, I
 
 
 
+
 export const authSlice = Slice<IAuthTriggers, ITriggers, IAuthState, IState>('getUser', {
     'getUser': getUserBite,
+    signIn: signInkBite,
     createPublicLink: createPublicLinkBite,
     authenticateLink: authenticateLinkBite,
 }, authInitialState)
