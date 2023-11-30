@@ -60,7 +60,7 @@ export class AuthenticateLinkService {
                         },
                         select: ['session_value'],
                         'where': {
-                            'session_value': args.input.link_session
+                            'session_value': args.input.sessionValue
                         }
                     }
                 },
@@ -88,11 +88,11 @@ export class AuthenticateLinkService {
     public async init(args: ScriptInitArgsType<IAuthTriggers, 'authenticateLink', 'start'>) {
     this.requestId = args.requestId;
     
-    if(args.input.link_session) {
+    if(args.input.sessionValue) {
         await  this.getDataWithSession(args);
         this.end()
     }
-    if(!args.input.link_session) {
+    if(!args.input.sessionValue) {
         try {
             const insertResuot: _PublicLinkSession = await rootRep.insert({
                 'table': 'public_link_session',
@@ -114,7 +114,7 @@ export class AuthenticateLinkService {
         if(this.sessionValue) {
             await this.getDataWithSession({...args, input: {
                 ...args.input,
-                link_session: this.sessionValue
+                sessionValue: this.sessionValue
             }});
         } else {
             this.err = linkErrors.LINK_SYSTEM_ERR;

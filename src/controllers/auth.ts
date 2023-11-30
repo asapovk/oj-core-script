@@ -16,7 +16,8 @@ class AuthController extends Controller {
                     'start':  args.input.start ? `${args.input.start}`: undefined,
                     'end': args.input.end ? `${args.input.end}`: undefined,
                     'link_value': args.input.linkValue,
-                    'serieId': args.input.serieId
+                    'serieId': args.input.serieId,
+                    'groupId': 1
                 }
             })
             return {
@@ -31,7 +32,7 @@ class AuthController extends Controller {
             const res =  await appStore.hook('authenticateLink', 'start', 'done', {
                 requestId,
                 input: {
-                    'link_session': auth,
+                    'sessionValue': auth,
                     'link_value': args.input.link,
                 },
             })

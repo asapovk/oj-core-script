@@ -7,6 +7,7 @@ import { AuthService } from "./Auth.service";
 import { AuthenticateLinkService, AuthenticateReturn_ } from "./services/AuthenticateLink.service";
 import { CreatePublicLinkService } from "./services/CreatePublicLink.service";
 import { SignInReturn_, SignInServiceService } from "./services/SignIn.service";
+import { GetLinkDataService } from "./services/GetLinkData.service";
 
 // load init serie on app start 
 // trigger in controller load serie // save result to state with requestId
@@ -41,7 +42,7 @@ export interface IAuthTriggers {
    createPublicLink: TriggerPhaseWrapper<{
     start: {
         requestId: string
-        input: {start?: string, end?: string, serieId: number, link_value: string}
+        input: {start?: string, end?: string, serieId: number, link_value: string, groupId?: number}
     };
     done: {
         ok: boolean,
@@ -53,7 +54,7 @@ export interface IAuthTriggers {
    authenticateLink: TriggerPhaseWrapper<{
     start: {
         requestId: string
-        input: {link_value: string, link_session?: string}
+        input: {link_value: string, sessionValue?: string}
     };
     done: {
         ok: boolean,
@@ -100,7 +101,7 @@ export const authenticateLinkBite = Bite<IAuthTriggers, ITriggers, IAuthState, I
     'triggerStatus': 'start',
     'updateOn': ['authenticateLink'],
     'canTrigger': ['authenticateLink'],
-    script: AuthenticateLinkService,
+    script: GetLinkDataService,
 })
 
 
