@@ -54,7 +54,7 @@ export class GetLinkDataService {
         offset: 0
     })
     if(!linkRes) {
-        this.err = 'NOT_FOUND';
+        this.err = linkErrors.INVALID_LINK;
         this.end();
     }else {
         this.data =  {
