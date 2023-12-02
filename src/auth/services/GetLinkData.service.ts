@@ -9,6 +9,7 @@ import { Connection, In, JoinWhere, Like, SubSelectForInsert } from "../../__boo
 import uuid from "uuid";
 import { linkErrors } from "../link.errors";
 import UnsafeWhere from "../../__boostorm/operator/Where/UnsafeWhere";
+import appStore from "../../_redux/app-store";
 
 
 export interface AuthenticateReturn_ {
@@ -95,7 +96,7 @@ export class GetLinkDataService {
     }
 
     private async processsPrivateLink(sessionValue: string, linkId: number) {
-        const userRes = await this.opts.hook('getUser', 'start', 'done', {
+        const userRes = await appStore.hook('getUser', 'start', 'done', {
             requestId: this.requestId,
             'input': {'session_uuid': sessionValue}
         })
