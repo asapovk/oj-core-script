@@ -56,9 +56,10 @@ export class GetLinkDataService {
         limit: 1,
         offset: 0
     })
-    if(!linkRes) {
+    if(!linkRes.length) {
         this.err = linkErrors.INVALID_LINK;
         this.end();
+        return
     }else {
         this.data =  {
             'publicLinkDtExprire': linkRes[0].dt_exprire,
