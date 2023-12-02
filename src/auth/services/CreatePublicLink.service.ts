@@ -54,7 +54,15 @@ export class CreatePublicLinkService {
                 'table': 'group_a_public_link_jnt',
                 'params': {
                     'id_public_link': resLink.id_public_link,
-                    'id_group': args.input.groupId,
+                    'id_group': SubSelectForInsert({
+                        'table': 'group_a',
+                        select: 'id_group_a',
+                        'where': {
+                            'id_group_a': args.input.groupId,
+                            'id_user': 26,//fix this 
+                        }
+                    }),
+                    
                 },
                 
             })

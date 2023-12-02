@@ -4,10 +4,9 @@ import { IState, ITriggers } from "../_redux/types";
 //import { LoadSerieService } from "./services/LoadSerie.service";
 import { _PublicLink, _PublicLinkSession, _Series, _Sessions, _Users } from "../__boostorm/entities";
 import { AuthService } from "./Auth.service";
-import { AuthenticateLinkService, AuthenticateReturn_ } from "./services/AuthenticateLink.service";
 import { CreatePublicLinkService } from "./services/CreatePublicLink.service";
 import { SignInReturn_, SignInServiceService } from "./services/SignIn.service";
-import { GetLinkDataService } from "./services/GetLinkData.service";
+import { GetLinkDataService, AuthenticateReturn_ } from "./services/GetLinkData.service";
 
 // load init serie on app start 
 // trigger in controller load serie // save result to state with requestId

@@ -862,6 +862,18 @@
             "deprecationReason": null
           },
           {
+            "name": "isMaster",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "session",
             "description": null,
             "args": [],

@@ -44,7 +44,8 @@ class AuthController extends Controller {
                         'linkValue': '1',
                         'serieId': res.data.publicLinkIdSerie,
                     }: null,
-                    errorCode: res.err
+                    errorCode: res.err,
+                    'isMaster': res.data.isMaster, 
                 }
             
         },(args) => args.headers.authorization)

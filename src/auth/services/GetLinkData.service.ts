@@ -5,9 +5,10 @@ import { rootRep, rootRepOpen } from "../../repository";
 import { _PublicLink, _PublicLinkSession, _Sessions, _Users } from "../../__boostorm/entities";
 import { AuthErrors } from "../auth.errors";
 import { join } from "path";
-import { Connection, JoinWhere, SubSelectForInsert } from "../../__boostorm";
+import { Connection, In, JoinWhere, Like, SubSelectForInsert } from "../../__boostorm";
 import uuid from "uuid";
 import { linkErrors } from "../link.errors";
+import UnsafeWhere from "../../__boostorm/operator/Where/UnsafeWhere";
 
 
 export interface AuthenticateReturn_ {
@@ -17,6 +18,7 @@ export interface AuthenticateReturn_ {
     publicLinkIdSerie: number,
     publicLinkSessionSessionValue: string
     session_value?: string
+    isMaster?: boolean;
 }
 
 export class GetLinkDataService {
@@ -30,6 +32,7 @@ export class GetLinkDataService {
     private err: string;
     private data: AuthenticateReturn_;
     private sessionValue: string;
+    private isMaster: boolean = false;
 
     private end() {
         this.opts.setStatus('done', {
@@ -104,6 +107,13 @@ export class GetLinkDataService {
 
             const groupRes: Array<any> = await rootRep.select({
                 'from':'group_a',
+                where: [{
+                    'id_user': UnsafeWhere({
+                        'left': 'group_a_user_jnt.id_user=',
+                        value: userId,
+                        right: '',
+                    })
+                }, {id_user: userId}],
                 'join': {
                     'group_a_user_jnt': {
                         on: {
@@ -111,9 +121,9 @@ export class GetLinkDataService {
                             'operator': '=',
                             'right': 'id_group_a',
                         },
-                        where: {
-                            'id_user': userId,
-                        }
+                        // where: {
+                        //     'id_user': userId,
+                        // }
                     },
                     'group_a_public_link_jnt': {
                         on: {
@@ -124,10 +134,10 @@ export class GetLinkDataService {
                         where: {
                             'id_public_link': linkId,
                         }
-                    }
+                    },
                 },
                 select: {
-                    columns: ['id_group_a', 'group_name', 'dt_expire']
+                    columns: ['id_group_a', 'group_name', 'dt_expire', 'id_user']
                 },
                 limit: 1,
                 offset: 0
@@ -135,6 +145,9 @@ export class GetLinkDataService {
 
             if(!groupRes.length) {
                 this.err = AuthErrors.ACCESS_DENIED
+            }
+            else if(groupRes[0].groupAIdUser === userId)  {
+                this.isMaster = true;
             }
             
         }
@@ -162,20 +175,22 @@ export class GetLinkDataService {
             
         }
         const ses: _PublicLinkSession =  await Connection.runTransaction(async (t)=> {
-            if(!confirmedSession) {
+            if(!sessionValue) {
                 const sessionRes: _PublicLinkSession = await rootRepOpen(t.execute).insert({
                     'table': 'public_link_session',
                     params: {'id_public_link': linkId, 'session_value': uuid()}
                 })
                 confirmedSession = sessionRes;
             }
-            await rootRepOpen(t.execute).insert({
-                'table': 'public_link_usage',
-                    params: {
-                        'id_public_link': linkId, 
-                        id_public_link_session: confirmedSession.id_public_link
-                }
-            }) 
+            if(confirmedSession) {
+                await rootRepOpen(t.execute).insert({
+                    'table': 'public_link_usage',
+                        params: {
+                            'id_public_link': linkId, 
+                            id_public_link_session: confirmedSession.id_public_link
+                    }
+                }) 
+            }
             return confirmedSession
         })
         if(!sessionValue) {

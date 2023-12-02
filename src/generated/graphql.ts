@@ -20,6 +20,7 @@ export type Authenticate = {
   __typename?: 'Authenticate';
   data?: Maybe<PublicLinkData>;
   errorCode?: Maybe<Scalars['String']['output']>;
+  isMaster?: Maybe<Scalars['Boolean']['output']>;
   session?: Maybe<Scalars['String']['output']>;
 };
 
@@ -314,6 +315,7 @@ export type ResolversParentTypes = {
 export type AuthenticateResolvers<ContextType = any, ParentType extends ResolversParentTypes['Authenticate'] = ResolversParentTypes['Authenticate']> = {
   data?: Resolver<Maybe<ResolversTypes['PublicLinkData']>, ParentType, ContextType>;
   errorCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isMaster?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   session?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

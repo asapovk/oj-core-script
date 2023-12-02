@@ -35,6 +35,7 @@ type WordStamp {
 
 type Authenticate {
   session: String
+  isMaster: Boolean
   data: PublicLinkData
   errorCode: String
 }
