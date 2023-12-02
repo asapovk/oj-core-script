@@ -146,9 +146,9 @@ export class GetLinkDataService {
 
             if(!groupRes.length) {
                 this.err = AuthErrors.ACCESS_DENIED
-            }
+            }   
             else if(groupRes[0].groupAIdUser === userId)  {
-                this.isMaster = true;
+                this.data.isMaster = true;
             }
             
         }
