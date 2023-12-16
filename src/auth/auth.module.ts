@@ -7,6 +7,7 @@ import { AuthService } from "./Auth.service";
 import { CreatePublicLinkService } from "./services/CreatePublicLink.service";
 import { SignInReturn_, SignInServiceService } from "./services/SignIn.service";
 import { GetLinkDataService, AuthenticateReturn_ } from "./services/GetLinkData.service";
+import { CheckSessionService } from "./services/CheckSession.service";
 
 // load init serie on app start 
 // trigger in controller load serie // save result to state with requestId
@@ -14,6 +15,21 @@ import { GetLinkDataService, AuthenticateReturn_ } from "./services/GetLinkData.
 // clear state
 
 export interface IAuthTriggers {
+    checkSession: TriggerPhaseWrapper<{
+        start: {
+            requestId: string
+            input: { sessionToken: string}
+        };
+        done: {
+            ok: boolean,
+            requestId: string
+            data: {
+                isMaster: boolean;
+                isAuth: boolean;
+            }
+            err: string
+        };
+   }>;
     signIn: TriggerPhaseWrapper<{
         start: {
             requestId: string
@@ -146,9 +162,24 @@ export const createPublicLinkBite = Bite<IAuthTriggers, ITriggers, IAuthState, I
 })
 
 
+export const checkSessionBite = Bite<IAuthTriggers, ITriggers, IAuthState, IState, 'checkSession'>({
+    'start': null,
+    done(state, payload) {
+       state.getUser.lastRequest = Date.now();
+    }
+}, {
+   'instance': 'multiple',
+   'triggerStatus': 'start',
+   'updateOn': ['checkSession'],
+   'canTrigger': ['checkSession'],
+   script: CheckSessionService,
+})
+
+
 
 
 export const authSlice = Slice<IAuthTriggers, ITriggers, IAuthState, IState>('getUser', {
+    checkSession: checkSessionBite,
     'getUser': getUserBite,
     signIn: signInkBite,
     createPublicLink: createPublicLinkBite,

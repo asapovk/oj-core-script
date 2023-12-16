@@ -65,3 +65,8 @@ type SignInResult {
   session: String
   errorCode: String
 }
+
+type CheckSessionResult {
+  isAuth: Boolean!
+  isMaster: Boolean
+}

@@ -27,6 +27,16 @@ class AuthController extends Controller {
         }, (args) => args.headers.authorization)
     }
     makeQuery = (q: Query) => {
+        this.createQueryResolver('checkSession', async ({}, auth: string) => {
+            const requestId = v4();
+            const res =  await appStore.hook('checkSession', 'start', 'done', {
+                requestId,
+                input: {
+                  'sessionToken':  auth
+                },
+            })
+            return  res.data
+        }, (args) => args.headers.authorization)
         this.createQueryResolver('authenticate', async (args: QueryAuthenticateArgs, auth: string) => {
             const requestId = v4();
             const res =  await appStore.hook('authenticateLink', 'start', 'done', {
@@ -45,7 +55,7 @@ class AuthController extends Controller {
                         'serieId': res.data.publicLinkIdSerie,
                     }: null,
                     errorCode: res.err,
-                    'isMaster': res.data.isMaster, 
+                    'isMaster': res.data ? res.data.isMaster: null, 
                 }
             
         },(args) => args.headers.authorization)

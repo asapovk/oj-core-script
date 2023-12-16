@@ -43,6 +43,12 @@ export type ChaptersInput = {
   chapterIds: Array<Scalars['Int']['input']>;
 };
 
+export type CheckSessionResult = {
+  __typename?: 'CheckSessionResult';
+  isAuth: Scalars['Boolean']['output'];
+  isMaster?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type CreatePublicLink = {
   __typename?: 'CreatePublicLink';
   data?: Maybe<Scalars['Int']['output']>;
@@ -90,6 +96,7 @@ export type Query = {
   __typename?: 'Query';
   authenticate: Authenticate;
   chapters: Array<Chapter>;
+  checkSession: CheckSessionResult;
   loadGroupedWordStamps: Array<WordStampsGroup>;
   signIn: SignInResult;
   singleSerie: Array<Serie>;
@@ -271,6 +278,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Chapter: ResolverTypeWrapper<Chapter>;
   ChaptersInput: ChaptersInput;
+  CheckSessionResult: ResolverTypeWrapper<CheckSessionResult>;
   CreatePublicLink: ResolverTypeWrapper<CreatePublicLink>;
   CreatePublicLinkInput: CreatePublicLinkInput;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -295,6 +303,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Chapter: Chapter;
   ChaptersInput: ChaptersInput;
+  CheckSessionResult: CheckSessionResult;
   CreatePublicLink: CreatePublicLink;
   CreatePublicLinkInput: CreatePublicLinkInput;
   Int: Scalars['Int'];
@@ -329,6 +338,12 @@ export type ChapterResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CheckSessionResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CheckSessionResult'] = ResolversParentTypes['CheckSessionResult']> = {
+  isAuth?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isMaster?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CreatePublicLinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatePublicLink'] = ResolversParentTypes['CreatePublicLink']> = {
   data?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   errorCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -352,6 +367,7 @@ export type PublicLinkDataResolvers<ContextType = any, ParentType extends Resolv
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   authenticate?: Resolver<ResolversTypes['Authenticate'], ParentType, ContextType, RequireFields<QueryAuthenticateArgs, 'input'>>;
   chapters?: Resolver<Array<ResolversTypes['Chapter']>, ParentType, ContextType, RequireFields<QueryChaptersArgs, 'input'>>;
+  checkSession?: Resolver<ResolversTypes['CheckSessionResult'], ParentType, ContextType>;
   loadGroupedWordStamps?: Resolver<Array<ResolversTypes['WordStampsGroup']>, ParentType, ContextType>;
   signIn?: Resolver<ResolversTypes['SignInResult'], ParentType, ContextType, RequireFields<QuerySignInArgs, 'input'>>;
   singleSerie?: Resolver<Array<ResolversTypes['Serie']>, ParentType, ContextType, RequireFields<QuerySingleSerieArgs, 'input'>>;
@@ -403,6 +419,7 @@ export type WordStampsGroupResolvers<ContextType = any, ParentType extends Resol
 export type Resolvers<ContextType = any> = {
   Authenticate?: AuthenticateResolvers<ContextType>;
   Chapter?: ChapterResolvers<ContextType>;
+  CheckSessionResult?: CheckSessionResultResolvers<ContextType>;
   CreatePublicLink?: CreatePublicLinkResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   PublicLinkData?: PublicLinkDataResolvers<ContextType>;
