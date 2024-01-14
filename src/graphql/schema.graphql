@@ -11,6 +11,7 @@ type Query {
 }   
 
 type Mutation {
+    createWordstamp (input: CreateWordstampInput!): Int!
     updateScript ( input: UpdateScriptInput!): Boolean!
     updateSerie ( input: UpdateSerieInput!) : Boolean!
     createPublicLink (input: CreatePublicLinkInput!): CreatePublicLink!

@@ -62,9 +62,19 @@ export type CreatePublicLinkInput = {
   start?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CreateWordstampInput = {
+  chapterId?: InputMaybe<Scalars['Int']['input']>;
+  kana?: InputMaybe<Scalars['String']['input']>;
+  serieId?: InputMaybe<Scalars['Int']['input']>;
+  transcription?: InputMaybe<Scalars['String']['input']>;
+  translation?: InputMaybe<Scalars['String']['input']>;
+  writing: Scalars['String']['input'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createPublicLink: CreatePublicLink;
+  createWordstamp: Scalars['Int']['output'];
   updateScript: Scalars['Boolean']['output'];
   updateSerie: Scalars['Boolean']['output'];
 };
@@ -72,6 +82,11 @@ export type Mutation = {
 
 export type MutationCreatePublicLinkArgs = {
   input: CreatePublicLinkInput;
+};
+
+
+export type MutationCreateWordstampArgs = {
+  input: CreateWordstampInput;
 };
 
 
@@ -281,6 +296,7 @@ export type ResolversTypes = {
   CheckSessionResult: ResolverTypeWrapper<CheckSessionResult>;
   CreatePublicLink: ResolverTypeWrapper<CreatePublicLink>;
   CreatePublicLinkInput: CreatePublicLinkInput;
+  CreateWordstampInput: CreateWordstampInput;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   PublicLinkData: ResolverTypeWrapper<PublicLinkData>;
@@ -306,6 +322,7 @@ export type ResolversParentTypes = {
   CheckSessionResult: CheckSessionResult;
   CreatePublicLink: CreatePublicLink;
   CreatePublicLinkInput: CreatePublicLinkInput;
+  CreateWordstampInput: CreateWordstampInput;
   Int: Scalars['Int'];
   Mutation: {};
   PublicLinkData: PublicLinkData;
@@ -352,6 +369,7 @@ export type CreatePublicLinkResolvers<ContextType = any, ParentType extends Reso
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createPublicLink?: Resolver<ResolversTypes['CreatePublicLink'], ParentType, ContextType, RequireFields<MutationCreatePublicLinkArgs, 'input'>>;
+  createWordstamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationCreateWordstampArgs, 'input'>>;
   updateScript?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateScriptArgs, 'input'>>;
   updateSerie?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateSerieArgs, 'input'>>;
 };

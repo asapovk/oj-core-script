@@ -5,13 +5,38 @@ import { _Chapters, _ScriptUpdate, _ScriptsProcessed, _Series, _WordStamps } fro
 import { LoadGroupedWordStamps } from "./services/LoadGroupedWordStamps";
 import { _LoadGroupedWordStamps } from "./dto/_loadGroupedWordStamps";
 import { LoadChaptersOfStamps } from "./services/LoadChaptersOfStamps";
+import { SaveWordStampService } from "./services/SaveWordStamp";
 
 // load init serie on app start 
 // trigger in controller load serie // save result to state with requestId
 // return state value in controller by requestId
 // clear state
 
+
+export interface CreateWordStampInput {
+    writing: string;
+    kana?: string;
+    chapterId?: number;
+    translation?: string;
+    transcription?: string;
+    serieId?: number;
+    videoUrl?: string;
+}
+
 export interface IWordStampTriggers {
+   saveWordStamp: TriggerPhaseWrapper<{
+    start: {
+        requestId: string
+        sessionId: string;
+        input: CreateWordStampInput
+    };
+    done: {
+        data: number;
+        requestId: string
+        ok: boolean
+        err: string
+    };
+   }>;
    loadGroupedWordStamps: TriggerPhaseWrapper<{
     start: {
         requestId: string
@@ -87,8 +112,22 @@ export const loadChaptersOfStampsBite = Bite<IWordStampTriggers, ITriggers, IWor
     script: LoadChaptersOfStamps,
 })
 
+export const saveWordStampBite = Bite<IWordStampTriggers, ITriggers, IWordStampState, IState, 'saveWordStamp'>({
+    'start': null,
+    done(state, payload) {
+        state.loadGroupedWordStamps.lastRequest = Date.now();
+    } 
+}, {
+    'instance': 'multiple',
+    'triggerStatus': 'start',
+    'updateOn': ['saveWordStamp'],
+    'canTrigger': ['saveWordStamp'],
+    script: SaveWordStampService,
+})
+
 
 export const wordStampsSlice = Slice<IWordStampTriggers, ITriggers, IWordStampState, IState>('serie', {
     'loadGroupedWordStamps': loadStampsSlice,
+    saveWordStamp: saveWordStampBite,
     'loadChaptersOfStamps': loadChaptersOfStampsBite,
 }, serieInitialState)

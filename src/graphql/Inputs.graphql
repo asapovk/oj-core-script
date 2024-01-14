@@ -41,3 +41,12 @@ input SignInInput {
     login: String!
     password: String!
 }
+
+input CreateWordstampInput {
+    chapterId: Int,
+    kana: String
+    serieId: Int,
+    writing: String!,
+    translation:  String,
+    transcription: String,
+}
