@@ -49,6 +49,22 @@ export type CheckSessionResult = {
   isMaster?: Maybe<Scalars['Boolean']['output']>;
 };
 
+export type Client = {
+  __typename?: 'Client';
+  dtCreate: Scalars['String']['output'];
+  dtExpire?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  group: Group;
+  invite?: Maybe<Invite>;
+  password?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  plan?: Maybe<Scalars['String']['output']>;
+  tgId?: Maybe<Scalars['String']['output']>;
+  tgUsername?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['Int']['output'];
+  username: Scalars['String']['output'];
+};
+
 export type CreatePublicLink = {
   __typename?: 'CreatePublicLink';
   data?: Maybe<Scalars['Int']['output']>;
@@ -71,10 +87,28 @@ export type CreateWordstampInput = {
   writing: Scalars['String']['input'];
 };
 
+export type Group = {
+  __typename?: 'Group';
+  dtCreate: Scalars['String']['output'];
+  groupId: Scalars['Int']['output'];
+  groupName: Scalars['String']['output'];
+};
+
+export type Invite = {
+  __typename?: 'Invite';
+  dtCreate?: Maybe<Scalars['String']['output']>;
+  inviteId: Scalars['Int']['output'];
+  plan: Scalars['String']['output'];
+  status?: Maybe<Scalars['String']['output']>;
+  token: Scalars['String']['output'];
+  useCount: Scalars['Int']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createPublicLink: CreatePublicLink;
   createWordstamp: Scalars['Int']['output'];
+  saveQuizResult: Scalars['Int']['output'];
   updateScript: Scalars['Boolean']['output'];
   updateSerie: Scalars['Boolean']['output'];
 };
@@ -87,6 +121,11 @@ export type MutationCreatePublicLinkArgs = {
 
 export type MutationCreateWordstampArgs = {
   input: CreateWordstampInput;
+};
+
+
+export type MutationSaveQuizResultArgs = {
+  input: SaveQuizResultInput;
 };
 
 
@@ -112,6 +151,9 @@ export type Query = {
   authenticate: Authenticate;
   chapters: Array<Chapter>;
   checkSession: CheckSessionResult;
+  clients: Array<Client>;
+  groups: Array<Group>;
+  invites: Array<Invite>;
   loadGroupedWordStamps: Array<WordStampsGroup>;
   signIn: SignInResult;
   singleSerie: Array<Serie>;
@@ -135,6 +177,10 @@ export type QuerySignInArgs = {
 
 export type QuerySingleSerieArgs = {
   input: SingleSerieInput;
+};
+
+export type SaveQuizResultInput = {
+  value: Scalars['String']['input'];
 };
 
 export type Serie = {
@@ -294,13 +340,17 @@ export type ResolversTypes = {
   Chapter: ResolverTypeWrapper<Chapter>;
   ChaptersInput: ChaptersInput;
   CheckSessionResult: ResolverTypeWrapper<CheckSessionResult>;
+  Client: ResolverTypeWrapper<Client>;
   CreatePublicLink: ResolverTypeWrapper<CreatePublicLink>;
   CreatePublicLinkInput: CreatePublicLinkInput;
   CreateWordstampInput: CreateWordstampInput;
+  Group: ResolverTypeWrapper<Group>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Invite: ResolverTypeWrapper<Invite>;
   Mutation: ResolverTypeWrapper<{}>;
   PublicLinkData: ResolverTypeWrapper<PublicLinkData>;
   Query: ResolverTypeWrapper<{}>;
+  SaveQuizResultInput: SaveQuizResultInput;
   Serie: ResolverTypeWrapper<Serie>;
   SignInInput: SignInInput;
   SignInResult: ResolverTypeWrapper<SignInResult>;
@@ -320,13 +370,17 @@ export type ResolversParentTypes = {
   Chapter: Chapter;
   ChaptersInput: ChaptersInput;
   CheckSessionResult: CheckSessionResult;
+  Client: Client;
   CreatePublicLink: CreatePublicLink;
   CreatePublicLinkInput: CreatePublicLinkInput;
   CreateWordstampInput: CreateWordstampInput;
+  Group: Group;
   Int: Scalars['Int'];
+  Invite: Invite;
   Mutation: {};
   PublicLinkData: PublicLinkData;
   Query: {};
+  SaveQuizResultInput: SaveQuizResultInput;
   Serie: Serie;
   SignInInput: SignInInput;
   SignInResult: SignInResult;
@@ -361,15 +415,49 @@ export type CheckSessionResultResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ClientResolvers<ContextType = any, ParentType extends ResolversParentTypes['Client'] = ResolversParentTypes['Client']> = {
+  dtCreate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  dtExpire?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
+  invite?: Resolver<Maybe<ResolversTypes['Invite']>, ParentType, ContextType>;
+  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  plan?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tgId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tgUsername?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CreatePublicLinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatePublicLink'] = ResolversParentTypes['CreatePublicLink']> = {
   data?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   errorCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GroupResolvers<ContextType = any, ParentType extends ResolversParentTypes['Group'] = ResolversParentTypes['Group']> = {
+  dtCreate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  groupId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  groupName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type InviteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Invite'] = ResolversParentTypes['Invite']> = {
+  dtCreate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  inviteId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  plan?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  useCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createPublicLink?: Resolver<ResolversTypes['CreatePublicLink'], ParentType, ContextType, RequireFields<MutationCreatePublicLinkArgs, 'input'>>;
   createWordstamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationCreateWordstampArgs, 'input'>>;
+  saveQuizResult?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationSaveQuizResultArgs, 'input'>>;
   updateScript?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateScriptArgs, 'input'>>;
   updateSerie?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateSerieArgs, 'input'>>;
 };
@@ -386,6 +474,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   authenticate?: Resolver<ResolversTypes['Authenticate'], ParentType, ContextType, RequireFields<QueryAuthenticateArgs, 'input'>>;
   chapters?: Resolver<Array<ResolversTypes['Chapter']>, ParentType, ContextType, RequireFields<QueryChaptersArgs, 'input'>>;
   checkSession?: Resolver<ResolversTypes['CheckSessionResult'], ParentType, ContextType>;
+  clients?: Resolver<Array<ResolversTypes['Client']>, ParentType, ContextType>;
+  groups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType>;
+  invites?: Resolver<Array<ResolversTypes['Invite']>, ParentType, ContextType>;
   loadGroupedWordStamps?: Resolver<Array<ResolversTypes['WordStampsGroup']>, ParentType, ContextType>;
   signIn?: Resolver<ResolversTypes['SignInResult'], ParentType, ContextType, RequireFields<QuerySignInArgs, 'input'>>;
   singleSerie?: Resolver<Array<ResolversTypes['Serie']>, ParentType, ContextType, RequireFields<QuerySingleSerieArgs, 'input'>>;
@@ -438,7 +529,10 @@ export type Resolvers<ContextType = any> = {
   Authenticate?: AuthenticateResolvers<ContextType>;
   Chapter?: ChapterResolvers<ContextType>;
   CheckSessionResult?: CheckSessionResultResolvers<ContextType>;
+  Client?: ClientResolvers<ContextType>;
   CreatePublicLink?: CreatePublicLinkResolvers<ContextType>;
+  Group?: GroupResolvers<ContextType>;
+  Invite?: InviteResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   PublicLinkData?: PublicLinkDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

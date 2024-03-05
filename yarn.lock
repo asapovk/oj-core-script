@@ -2359,6 +2359,11 @@
   resolved "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@reflexio/core-v1@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.npmjs.org/@reflexio/core-v1/-/core-v1-1.2.4.tgz#f728215ae1928dbadcc5b829bb78c89e23e821a8"
+  integrity sha512-RfuNDzrZjaiC3YFhrp0jKZoP0f4zqY5gUEYpmmU7UA+ouvo70qeCOgeqYfqw5fnAewJhjBy5v/EXmzzcJPD62g==
+
 "@reflexio/reflexio-on-redux@^0.9.2":
   version "0.9.2"
   resolved "https://registry.npmjs.org/@reflexio/reflexio-on-redux/-/reflexio-on-redux-0.9.2.tgz#f6ae89eb80513631b3fad7e32e77c925e3c16f67"

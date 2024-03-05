@@ -2,6 +2,9 @@
 #import * from "Inputs.graphql";
 
 type Query {
+    clients: [Client!]!
+    groups: [Group!]!
+    invites: [Invite!]!  
     singleSerie (input: SingleSerieInput!) : [Serie!]!
     loadGroupedWordStamps: [WordStampsGroup!]!
     authenticate (input: AuthenticateInput! ) : Authenticate!
@@ -11,6 +14,7 @@ type Query {
 }   
 
 type Mutation {
+    saveQuizResult (input: SaveQuizResultInput!): Int!
     createWordstamp (input: CreateWordstampInput!): Int!
     updateScript ( input: UpdateScriptInput!): Boolean!
     updateSerie ( input: UpdateSerieInput!) : Boolean!

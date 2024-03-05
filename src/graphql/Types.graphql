@@ -70,3 +70,34 @@ type CheckSessionResult {
   isAuth: Boolean!
   isMaster: Boolean
 }
+
+
+type Group {
+    groupId: Int!
+    dtCreate: String!
+    groupName: String!
+}
+
+type Invite {
+  inviteId: Int!
+  dtCreate: String
+  status: String
+  useCount: Int!
+  token: String!
+  plan: String!
+}
+
+type Client {
+    userId: Int!
+    group: Group!
+    invite: Invite
+    dtCreate: String!
+    dtExpire: String
+    plan: String
+    username: String!
+    email: String
+    phone: String
+    tgUsername: String
+    tgId: String
+    password: String
+}

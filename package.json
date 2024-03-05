@@ -11,7 +11,7 @@
         "schema": "node scripts/boostorm/schema.js",
         "return": "ts-node scripts/boostorm/return.ts",
         "debug": "ts-node scripts/boostorm/debug.ts",
-        "script": "ts-node  --project scripts/tsconfig.json scripts/seed.ts", 
+        "script": "ts-node  --project scripts/tsconfig.json scripts/seed.ts",
         "codegen": "graphql-codegen --config codegen.ts"
     },
     "bin": "dist/index.js",
@@ -21,6 +21,7 @@
         "@aws-sdk/client-s3": "^3.113.0",
         "@aws-sdk/lib-storage": "^3.113.0",
         "@graphql-codegen/typescript-resolvers": "^1.12.2",
+        "@reflexio/core-v1": "^1.2.4",
         "@reflexio/reflexio-on-redux": "^0.9.2",
         "@types/nodemailer": "^6.2.0",
         "@types/pg": "^7.14.1",

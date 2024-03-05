@@ -50,3 +50,8 @@ input CreateWordstampInput {
     translation:  String,
     transcription: String,
 }
+
+input SaveQuizResultInput {
+  value: String!
+}
+

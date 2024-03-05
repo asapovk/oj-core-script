@@ -1,10 +1,35 @@
 import Controller from './controller'
-import {Mutation, MutationCreateWordstampArgs, MutationUpdateScriptArgs, Query, QueryChaptersArgs, QuerySingleSerieArgs } from '../generated/graphql'
+import {Mutation, MutationCreateWordstampArgs, MutationSaveQuizResultArgs, MutationUpdateScriptArgs, Query, QueryChaptersArgs, QuerySingleSerieArgs } from '../generated/graphql'
 import appStore from '../_redux/app-store'
 import {v4} from 'uuid'
 
 class WordStampController extends Controller {
     makeMutation = (m: Mutation) => {
+        this.createMutationResolver('saveQuizResult', async (args: MutationSaveQuizResultArgs, auth: string) => {
+            const requestId = v4();
+            if(!auth) {
+                throw Error('MISSING_AUTH_TOKEN');
+            }
+            // const res =  await appStore.hook('saveWordStamp', 'start', 'done', {
+            //     requestId,
+            //     sessionId: auth,
+            //     input: {
+            //         'chapterId': args.input.chapterId,
+            //         'kana': args.input.kana,
+            //         'serieId': args.input.serieId,
+            //         'writing': args.input.writing,
+            //         'transcription': args.input.transcription,
+            //         'translation': args.input.translation
+            //     }
+            // })
+            // if(res.ok) {
+            //     return res.data
+            // }
+            // else {
+            //     throw Error(res.err);
+            // }
+            return 1
+        },(args) => args.headers.authorization)
         this.createMutationResolver('createWordstamp', async (args: MutationCreateWordstampArgs, auth: string) => {
             const requestId = v4();
             if(!auth) {
