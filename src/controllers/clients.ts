@@ -12,7 +12,6 @@ class ClientsController extends Controller {
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
-            console.log('loadClients');
             const res =  await appStore.hook('loadClients', 'init', 'done', {
                 requestId,
                 input: {
@@ -46,9 +45,15 @@ class ClientsController extends Controller {
             }
             const res =  await appStore.hook('loadGroups', 'init', 'done', {
                 requestId,
+                input: { sessionToken: auth}
+                
             })
             if(res.ok) {
-                return [];
+                return res.data.map(r => ({
+                    'groupId': r.id_group_a,
+                    'groupName': r.group_name,
+                    'dtCreate': r.dt_create.toISOString(),
+                }))
             }
             else {
                 throw Error(res.error);

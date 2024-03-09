@@ -5,6 +5,7 @@ import { _GroupA } from "../__boostorm/entities";
 import { IState, ITriggers } from "../_redux/types";
 import { LoadClients, __SelectUsersOfGroupsReturn } from "./scripts/LoadClients";
 import { TriggerPhaseWrapper } from "@reflexio/reflexio-on-redux/lib/types";
+import { LoadGroups } from "./scripts/LoadGroups";
 
 export interface IClientTriggers {
     loadClients: TriggerPhaseWrapper<{
@@ -25,6 +26,9 @@ export interface IClientTriggers {
     loadGroups: TriggerPhaseWrapper<{
         init: {
             requestId: string;
+            input: {
+                sessionToken: string;
+            }
         };
         done: {
             requestId: string
@@ -46,6 +50,14 @@ export const clientsSlice = Slice<IClientTriggers, ITriggers, null, IState>(
             'updateOn': ['loadClients'],
             'script': LoadClients
     }),
-    //'loadGroups': null
+                 //@ts-ignore
+    'loadGroups':  Bite(null, {
+                     //@ts-ignore
+           'triggerStatus': 'init',
+           'instance': 'refreshing',
+                        //@ts-ignore
+           'updateOn': ['loadGroups'],
+           'script': LoadGroups
+   })
     }, null
 );
