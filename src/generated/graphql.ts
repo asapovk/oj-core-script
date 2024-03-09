@@ -65,6 +65,25 @@ export type Client = {
   username: Scalars['String']['output'];
 };
 
+export type ClientsInput = {
+  accessStatus?: InputMaybe<Scalars['String']['input']>;
+  dtInvite?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  groupId?: InputMaybe<Scalars['Int']['input']>;
+  inviteId?: InputMaybe<Scalars['Int']['input']>;
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateGroupInput = {
+  groupName: Scalars['String']['input'];
+};
+
+export type CreateInviteInput = {
+  groupId: Scalars['Int']['input'];
+};
+
 export type CreatePublicLink = {
   __typename?: 'CreatePublicLink';
   data?: Maybe<Scalars['Int']['output']>;
@@ -104,13 +123,40 @@ export type Invite = {
   useCount: Scalars['Int']['output'];
 };
 
+export type InvitesInput = {
+  groupId?: InputMaybe<Scalars['Int']['input']>;
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  status?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ManageGroupUserInput = {
+  groupId: Scalars['Int']['input'];
+  userId: Scalars['Int']['input'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createGroup: Scalars['Int']['output'];
+  createInvite: Invite;
   createPublicLink: CreatePublicLink;
   createWordstamp: Scalars['Int']['output'];
+  manageGroupUser: Scalars['Boolean']['output'];
   saveQuizResult: Scalars['Int']['output'];
+  updateGroup: Scalars['Boolean']['output'];
+  updateInvite: Scalars['Boolean']['output'];
   updateScript: Scalars['Boolean']['output'];
   updateSerie: Scalars['Boolean']['output'];
+};
+
+
+export type MutationCreateGroupArgs = {
+  input: CreateGroupInput;
+};
+
+
+export type MutationCreateInviteArgs = {
+  input: CreateInviteInput;
 };
 
 
@@ -124,8 +170,23 @@ export type MutationCreateWordstampArgs = {
 };
 
 
+export type MutationManageGroupUserArgs = {
+  input: ManageGroupUserInput;
+};
+
+
 export type MutationSaveQuizResultArgs = {
   input: SaveQuizResultInput;
+};
+
+
+export type MutationUpdateGroupArgs = {
+  input: UpdateGroupInput;
+};
+
+
+export type MutationUpdateInviteArgs = {
+  input: UpdateInviteInput;
 };
 
 
@@ -167,6 +228,16 @@ export type QueryAuthenticateArgs = {
 
 export type QueryChaptersArgs = {
   input: ChaptersInput;
+};
+
+
+export type QueryClientsArgs = {
+  input: ClientsInput;
+};
+
+
+export type QueryInvitesArgs = {
+  input: InvitesInput;
 };
 
 
@@ -213,6 +284,14 @@ export type SignInResult = {
 
 export type SingleSerieInput = {
   serieId: Scalars['Int']['input'];
+};
+
+export type UpdateGroupInput = {
+  groupId: Scalars['Int']['input'];
+};
+
+export type UpdateInviteInput = {
+  inviteId: Scalars['Int']['input'];
 };
 
 export type UpdateScriptInput = {
@@ -341,12 +420,17 @@ export type ResolversTypes = {
   ChaptersInput: ChaptersInput;
   CheckSessionResult: ResolverTypeWrapper<CheckSessionResult>;
   Client: ResolverTypeWrapper<Client>;
+  ClientsInput: ClientsInput;
+  CreateGroupInput: CreateGroupInput;
+  CreateInviteInput: CreateInviteInput;
   CreatePublicLink: ResolverTypeWrapper<CreatePublicLink>;
   CreatePublicLinkInput: CreatePublicLinkInput;
   CreateWordstampInput: CreateWordstampInput;
   Group: ResolverTypeWrapper<Group>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Invite: ResolverTypeWrapper<Invite>;
+  InvitesInput: InvitesInput;
+  ManageGroupUserInput: ManageGroupUserInput;
   Mutation: ResolverTypeWrapper<{}>;
   PublicLinkData: ResolverTypeWrapper<PublicLinkData>;
   Query: ResolverTypeWrapper<{}>;
@@ -356,6 +440,8 @@ export type ResolversTypes = {
   SignInResult: ResolverTypeWrapper<SignInResult>;
   SingleSerieInput: SingleSerieInput;
   String: ResolverTypeWrapper<Scalars['String']>;
+  UpdateGroupInput: UpdateGroupInput;
+  UpdateInviteInput: UpdateInviteInput;
   UpdateScriptInput: UpdateScriptInput;
   UpdateSerieInput: UpdateSerieInput;
   WordStamp: ResolverTypeWrapper<WordStamp>;
@@ -371,12 +457,17 @@ export type ResolversParentTypes = {
   ChaptersInput: ChaptersInput;
   CheckSessionResult: CheckSessionResult;
   Client: Client;
+  ClientsInput: ClientsInput;
+  CreateGroupInput: CreateGroupInput;
+  CreateInviteInput: CreateInviteInput;
   CreatePublicLink: CreatePublicLink;
   CreatePublicLinkInput: CreatePublicLinkInput;
   CreateWordstampInput: CreateWordstampInput;
   Group: Group;
   Int: Scalars['Int'];
   Invite: Invite;
+  InvitesInput: InvitesInput;
+  ManageGroupUserInput: ManageGroupUserInput;
   Mutation: {};
   PublicLinkData: PublicLinkData;
   Query: {};
@@ -386,6 +477,8 @@ export type ResolversParentTypes = {
   SignInResult: SignInResult;
   SingleSerieInput: SingleSerieInput;
   String: Scalars['String'];
+  UpdateGroupInput: UpdateGroupInput;
+  UpdateInviteInput: UpdateInviteInput;
   UpdateScriptInput: UpdateScriptInput;
   UpdateSerieInput: UpdateSerieInput;
   WordStamp: WordStamp;
@@ -455,9 +548,14 @@ export type InviteResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createGroup?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationCreateGroupArgs, 'input'>>;
+  createInvite?: Resolver<ResolversTypes['Invite'], ParentType, ContextType, RequireFields<MutationCreateInviteArgs, 'input'>>;
   createPublicLink?: Resolver<ResolversTypes['CreatePublicLink'], ParentType, ContextType, RequireFields<MutationCreatePublicLinkArgs, 'input'>>;
   createWordstamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationCreateWordstampArgs, 'input'>>;
+  manageGroupUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationManageGroupUserArgs, 'input'>>;
   saveQuizResult?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationSaveQuizResultArgs, 'input'>>;
+  updateGroup?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, 'input'>>;
+  updateInvite?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateInviteArgs, 'input'>>;
   updateScript?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateScriptArgs, 'input'>>;
   updateSerie?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateSerieArgs, 'input'>>;
 };
@@ -474,9 +572,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   authenticate?: Resolver<ResolversTypes['Authenticate'], ParentType, ContextType, RequireFields<QueryAuthenticateArgs, 'input'>>;
   chapters?: Resolver<Array<ResolversTypes['Chapter']>, ParentType, ContextType, RequireFields<QueryChaptersArgs, 'input'>>;
   checkSession?: Resolver<ResolversTypes['CheckSessionResult'], ParentType, ContextType>;
-  clients?: Resolver<Array<ResolversTypes['Client']>, ParentType, ContextType>;
+  clients?: Resolver<Array<ResolversTypes['Client']>, ParentType, ContextType, RequireFields<QueryClientsArgs, 'input'>>;
   groups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType>;
-  invites?: Resolver<Array<ResolversTypes['Invite']>, ParentType, ContextType>;
+  invites?: Resolver<Array<ResolversTypes['Invite']>, ParentType, ContextType, RequireFields<QueryInvitesArgs, 'input'>>;
   loadGroupedWordStamps?: Resolver<Array<ResolversTypes['WordStampsGroup']>, ParentType, ContextType>;
   signIn?: Resolver<ResolversTypes['SignInResult'], ParentType, ContextType, RequireFields<QuerySignInArgs, 'input'>>;
   singleSerie?: Resolver<Array<ResolversTypes['Serie']>, ParentType, ContextType, RequireFields<QuerySingleSerieArgs, 'input'>>;

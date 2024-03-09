@@ -4,12 +4,14 @@ import rootReducer from './reducer';
 import { serieSlice } from '../serie/serie.module';
 import { authSlice } from '../auth/auth.module';
 import { wordStampsSlice } from '../wordStamp/wordStamps.module';
+import { clientsSlice } from '../client/client.slice';
 
 function configureStore() {
   const middlewares: Middleware[] = [
     serieSlice.middleware,
     authSlice.middleware,
     wordStampsSlice.middleware,
+    clientsSlice.middleware,
   ];
   const system = useSystem();
   system.setConfig({

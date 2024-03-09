@@ -55,3 +55,41 @@ input SaveQuizResultInput {
   value: String!
 }
 
+
+
+input ClientsInput {
+    limit: Int!
+    offset: Int!
+    groupId: Int
+    inviteId: Int
+    dtInvite: String
+    email: String
+    username: String
+    accessStatus: String
+}
+input InvitesInput {
+    limit: Int!
+    offset: Int!
+    groupId: Int
+    status: String
+}
+
+input CreateGroupInput {
+    groupName: String!
+}
+
+input UpdateGroupInput {
+    groupId: Int!
+}
+
+input ManageGroupUserInput {
+    userId: Int!
+    groupId: Int!
+}
+
+input CreateInviteInput {
+    groupId: Int!
+}
+input UpdateInviteInput {
+    inviteId: Int!
+}

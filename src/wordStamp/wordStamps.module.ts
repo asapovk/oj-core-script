@@ -28,19 +28,19 @@ export interface SaveTestResult {
 }
 
 export interface IWordStampTriggers {
-   saveTestResult: TriggerPhaseWrapper<{
-    start: {
-        requestId: string
-        sessionId: string;
-        input: CreateWordStampInput
-    };
-    done: {
-        data: number;
-        requestId: string
-        ok: boolean
-        err: string
-    };
-   }>;
+//    saveTestResult: TriggerPhaseWrapper<{
+//     start: {
+//         requestId: string
+//         sessionId: string;
+//         input: CreateWordStampInput
+//     };
+//     done: {
+//         data: number;
+//         requestId: string
+//         ok: boolean
+//         err: string
+//     };
+//    }>;
    saveWordStamp: TriggerPhaseWrapper<{
     start: {
         requestId: string

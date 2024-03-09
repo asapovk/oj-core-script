@@ -8,7 +8,7 @@ import { WordStampErorrs } from "../wordStamps.error";
 import appStore from "../../_redux/app-store";
 import { _LoadGroupedWordStamps } from "../dto/_loadGroupedWordStamps";
 
-export class SaveWordStampService {
+export class SateTEstResultScript {
     constructor(private opts: ScriptOptsType<IWordStampTriggers, ITriggers, IState, 'saveWordStamp'>) {}
     private requestId: string;
     private data: number = null;
