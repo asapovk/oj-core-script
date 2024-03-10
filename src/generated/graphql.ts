@@ -106,6 +106,10 @@ export type CreateWordstampInput = {
   writing: Scalars['String']['input'];
 };
 
+export type DeleteInviteInput = {
+  inviteId: Scalars['Int']['input'];
+};
+
 export type Group = {
   __typename?: 'Group';
   dtCreate: Scalars['String']['output'];
@@ -130,9 +134,16 @@ export type InvitesInput = {
   status?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type ManageGroupUserInput = {
+export type ManageGroupMomentInput = {
+  addMomentIds: Array<Scalars['Int']['input']>;
+  deleteMomentIds: Array<Scalars['Int']['input']>;
   groupId: Scalars['Int']['input'];
-  userId: Scalars['Int']['input'];
+};
+
+export type ManageGroupUserInput = {
+  addUserIds: Array<Scalars['Int']['input']>;
+  deleteUserIds: Array<Scalars['Int']['input']>;
+  groupId: Scalars['Int']['input'];
 };
 
 export type Mutation = {
@@ -141,12 +152,14 @@ export type Mutation = {
   createInvite: Invite;
   createPublicLink: CreatePublicLink;
   createWordstamp: Scalars['Int']['output'];
+  deleleInvite: Scalars['Boolean']['output'];
+  manageGroupMoment: Scalars['Boolean']['output'];
   manageGroupUser: Scalars['Boolean']['output'];
   saveQuizResult: Scalars['Int']['output'];
   updateGroup: Scalars['Boolean']['output'];
-  updateInvite: Scalars['Boolean']['output'];
   updateScript: Scalars['Boolean']['output'];
   updateSerie: Scalars['Boolean']['output'];
+  useGroupInviete: Scalars['Boolean']['output'];
 };
 
 
@@ -170,6 +183,16 @@ export type MutationCreateWordstampArgs = {
 };
 
 
+export type MutationDeleleInviteArgs = {
+  input?: InputMaybe<DeleteInviteInput>;
+};
+
+
+export type MutationManageGroupMomentArgs = {
+  input: ManageGroupMomentInput;
+};
+
+
 export type MutationManageGroupUserArgs = {
   input: ManageGroupUserInput;
 };
@@ -185,11 +208,6 @@ export type MutationUpdateGroupArgs = {
 };
 
 
-export type MutationUpdateInviteArgs = {
-  input: UpdateInviteInput;
-};
-
-
 export type MutationUpdateScriptArgs = {
   input: UpdateScriptInput;
 };
@@ -197,6 +215,11 @@ export type MutationUpdateScriptArgs = {
 
 export type MutationUpdateSerieArgs = {
   input: UpdateSerieInput;
+};
+
+
+export type MutationUseGroupInvieteArgs = {
+  input: UseGroupInviteInput;
 };
 
 export type PublicLinkData = {
@@ -288,10 +311,8 @@ export type SingleSerieInput = {
 
 export type UpdateGroupInput = {
   groupId: Scalars['Int']['input'];
-};
-
-export type UpdateInviteInput = {
-  inviteId: Scalars['Int']['input'];
+  groupName?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateScriptInput = {
@@ -308,6 +329,10 @@ export type UpdateSerieInput = {
   title?: InputMaybe<Scalars['String']['input']>;
   userId: Scalars['String']['input'];
   videoUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UseGroupInviteInput = {
+  inviteToken: Scalars['String']['input'];
 };
 
 export type WordStamp = {
@@ -426,10 +451,12 @@ export type ResolversTypes = {
   CreatePublicLink: ResolverTypeWrapper<CreatePublicLink>;
   CreatePublicLinkInput: CreatePublicLinkInput;
   CreateWordstampInput: CreateWordstampInput;
+  DeleteInviteInput: DeleteInviteInput;
   Group: ResolverTypeWrapper<Group>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Invite: ResolverTypeWrapper<Invite>;
   InvitesInput: InvitesInput;
+  ManageGroupMomentInput: ManageGroupMomentInput;
   ManageGroupUserInput: ManageGroupUserInput;
   Mutation: ResolverTypeWrapper<{}>;
   PublicLinkData: ResolverTypeWrapper<PublicLinkData>;
@@ -441,9 +468,9 @@ export type ResolversTypes = {
   SingleSerieInput: SingleSerieInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   UpdateGroupInput: UpdateGroupInput;
-  UpdateInviteInput: UpdateInviteInput;
   UpdateScriptInput: UpdateScriptInput;
   UpdateSerieInput: UpdateSerieInput;
+  UseGroupInviteInput: UseGroupInviteInput;
   WordStamp: ResolverTypeWrapper<WordStamp>;
   WordStampsGroup: ResolverTypeWrapper<WordStampsGroup>;
 };
@@ -463,10 +490,12 @@ export type ResolversParentTypes = {
   CreatePublicLink: CreatePublicLink;
   CreatePublicLinkInput: CreatePublicLinkInput;
   CreateWordstampInput: CreateWordstampInput;
+  DeleteInviteInput: DeleteInviteInput;
   Group: Group;
   Int: Scalars['Int'];
   Invite: Invite;
   InvitesInput: InvitesInput;
+  ManageGroupMomentInput: ManageGroupMomentInput;
   ManageGroupUserInput: ManageGroupUserInput;
   Mutation: {};
   PublicLinkData: PublicLinkData;
@@ -478,9 +507,9 @@ export type ResolversParentTypes = {
   SingleSerieInput: SingleSerieInput;
   String: Scalars['String'];
   UpdateGroupInput: UpdateGroupInput;
-  UpdateInviteInput: UpdateInviteInput;
   UpdateScriptInput: UpdateScriptInput;
   UpdateSerieInput: UpdateSerieInput;
+  UseGroupInviteInput: UseGroupInviteInput;
   WordStamp: WordStamp;
   WordStampsGroup: WordStampsGroup;
 };
@@ -552,12 +581,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createInvite?: Resolver<ResolversTypes['Invite'], ParentType, ContextType, RequireFields<MutationCreateInviteArgs, 'input'>>;
   createPublicLink?: Resolver<ResolversTypes['CreatePublicLink'], ParentType, ContextType, RequireFields<MutationCreatePublicLinkArgs, 'input'>>;
   createWordstamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationCreateWordstampArgs, 'input'>>;
+  deleleInvite?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleleInviteArgs, never>>;
+  manageGroupMoment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationManageGroupMomentArgs, 'input'>>;
   manageGroupUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationManageGroupUserArgs, 'input'>>;
   saveQuizResult?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationSaveQuizResultArgs, 'input'>>;
   updateGroup?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, 'input'>>;
-  updateInvite?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateInviteArgs, 'input'>>;
   updateScript?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateScriptArgs, 'input'>>;
   updateSerie?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateSerieArgs, 'input'>>;
+  useGroupInviete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUseGroupInvieteArgs, 'input'>>;
 };
 
 export type PublicLinkDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicLinkData'] = ResolversParentTypes['PublicLinkData']> = {

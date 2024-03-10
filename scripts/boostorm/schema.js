@@ -12,10 +12,10 @@ async function run() {
         ...config.ormconfig.connection,
     })
     try {
-        console.log(client);
         await client.connect()
     } catch(err) {
-        console.log(err);
+        console.log('ERROR');
+        //console.log(err);
     }
     const resTables = await getAllTables(client);
     const resForeignKeys = await getForeignKeys(client)
@@ -78,7 +78,9 @@ async function run() {
     fs.writeFileSync('src/__boostorm/entities.d.ts', tdsString, 'utf-8')
     client.end()
 }
-run()
+run().then( r => {
+    console.log('end');
+})
 
 
 async function getAllTables(client) {

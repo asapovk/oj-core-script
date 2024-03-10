@@ -14,11 +14,13 @@ type Query {
 }   
 
 type Mutation {
+    useGroupInviete (input: UseGroupInviteInput!): Boolean!
     createGroup (input: CreateGroupInput!): Int!
     updateGroup (input: UpdateGroupInput!): Boolean!
+    deleleInvite (input: DeleteInviteInput): Boolean!
     manageGroupUser (input: ManageGroupUserInput!): Boolean!
+    manageGroupMoment (input: ManageGroupMomentInput!): Boolean!
     createInvite (input: CreateInviteInput!): Invite!
-    updateInvite (input: UpdateInviteInput!): Boolean!
 
     saveQuizResult (input: SaveQuizResultInput!): Int!
     createWordstamp (input: CreateWordstampInput!): Int!

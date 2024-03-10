@@ -80,16 +80,30 @@ input CreateGroupInput {
 
 input UpdateGroupInput {
     groupId: Int!
+    groupName: String
+    isActive: Boolean
 }
 
 input ManageGroupUserInput {
-    userId: Int!
+    addUserIds: [Int!]!
+    deleteUserIds: [Int!]!
+    groupId: Int!
+}
+
+input ManageGroupMomentInput {
+    addMomentIds: [Int!]!
+    deleteMomentIds: [Int!]!
     groupId: Int!
 }
 
 input CreateInviteInput {
     groupId: Int!
 }
-input UpdateInviteInput {
+
+input DeleteInviteInput {
     inviteId: Int!
+}
+
+input UseGroupInviteInput {
+    inviteToken: String! 
 }
