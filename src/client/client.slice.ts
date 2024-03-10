@@ -11,6 +11,7 @@ import { UpdateGroupService } from "./scripts/UpdateGroup";
 import { CreateInviteService } from "./scripts/CreateInvite";
 import { DeleteInviteService } from "./scripts/DeleteInvite";
 import { UseGroupInviteService } from "./scripts/UseGroupInvite";
+import { LoadInvites } from "./scripts/LoadInvites";
 
 export interface IClientTriggers {
     useGroupInvite: TriggerPhaseWrapper<{
@@ -65,6 +66,8 @@ export interface IClientTriggers {
     createInvite: TriggerPhaseWrapper<{
         init: {
             input: {
+                inviteName: string;
+                dtExpire?: string;
                 groupId: number;
                 sessionToken: string;
             }
@@ -153,6 +156,21 @@ export interface IClientTriggers {
             error?: string;
         }
     }>
+    loadInvites: TriggerPhaseWrapper<{
+        init: {
+            requestId: string;
+            input: {
+                groupId?: number;
+                sessionToken: string;
+            }
+        };
+        done: {
+            requestId: string
+            ok: boolean;
+            data?: Array<_GroupInvite>;
+            error?: string;
+        }
+    }>
 }
 
 export const clientsSlice = Slice<IClientTriggers, ITriggers, null, IState>(
@@ -219,6 +237,15 @@ export const clientsSlice = Slice<IClientTriggers, ITriggers, null, IState>(
                         //@ts-ignore
            'updateOn': ['useGroupInvite'],
            'script': UseGroupInviteService
+    }),
+             //@ts-ignore
+   'loadInvites': Bite(null, {
+                     //@ts-ignore
+           'triggerStatus': 'init',
+           'instance': 'refreshing',
+                        //@ts-ignore
+           'updateOn': ['loadInvites'],
+           'script': LoadInvites
     }),
     }, null
 );

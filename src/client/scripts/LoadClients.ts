@@ -77,11 +77,12 @@ export class LoadClients extends Script<ITriggers, IState, 'loadClients', 'init'
                 'id_group_a': filter.groupId || In(ids),
             },
             select: {
-                'columns': ['id_group_a_user_jnt']
+                'columns': ['id_group_a_user_jnt', 'dt_expire']
             },
             limit: 'infinity',
             offset: 0
         }) 
+        console.log(resp);
         return resp;
     }
 

@@ -1,5 +1,5 @@
 import Controller from './controller'
-import {Mutation, MutationCreateGroupArgs, MutationCreateInviteArgs, MutationDeleleInviteArgs, MutationManageGroupMomentArgs, MutationManageGroupUserArgs, MutationUpdateGroupArgs, MutationUpdateScriptArgs, MutationUseGroupInvieteArgs, Query, QueryClientsArgs, QuerySingleSerieArgs } from '../generated/graphql'
+import {Mutation, MutationCreateGroupArgs, MutationCreateInviteArgs, MutationDeleleInviteArgs, MutationManageGroupMomentArgs, MutationManageGroupUserArgs, MutationUpdateGroupArgs, MutationUpdateScriptArgs, MutationUseGroupInvieteArgs, Query, QueryClientsArgs, QueryInvitesArgs, QuerySingleSerieArgs } from '../generated/graphql'
 import appStore from '../_redux/app-store'
 import {v4} from 'uuid'
 
@@ -23,7 +23,7 @@ class ClientsController extends Controller {
             else {
                 throw Error(res.error);
             }
-        })
+        },(args) => args.headers.authorization)
         this.createMutationResolver('createGroup', async (args: MutationCreateGroupArgs, auth: string) => {
             const requestId = v4();
             if(!auth) {
@@ -42,7 +42,7 @@ class ClientsController extends Controller {
             else {
                 throw Error(res.error);
             }
-        })
+        },(args) => args.headers.authorization)
         this.createMutationResolver('updateGroup', async (args: MutationUpdateGroupArgs, auth: string)=> {
             const requestId = v4();
             if(!auth) {
@@ -58,12 +58,12 @@ class ClientsController extends Controller {
                 }
             })
             if(res.ok) {
-                return res.data
+                return true
             }
             else {
                 throw Error(res.error);
             }
-        })
+        },(args) => args.headers.authorization)
         this.createMutationResolver('deleleInvite', async (args: MutationDeleleInviteArgs, auth: string) => {
             const requestId = v4();
             if(!auth) {
@@ -71,7 +71,7 @@ class ClientsController extends Controller {
             }
             return true
             
-        })
+        },(args) => args.headers.authorization)
         this.createMutationResolver('createInvite', async (args: MutationCreateInviteArgs, auth: string)=> {
             const requestId = v4();
             if(!auth) {
@@ -80,6 +80,8 @@ class ClientsController extends Controller {
             const res =  await appStore.hook('createInvite', 'init', 'done', {
                 requestId,
                 input: {
+                    'dtExpire': args.input.dtExpire,
+                    'inviteName': args.input.nameInvite,
                     groupId: args.input.groupId,
                     sessionToken: auth
                 }
@@ -89,7 +91,7 @@ class ClientsController extends Controller {
                     'inviteId': res.data.id_group_invite,
                     'token': res.data.invite_token,
                     'dtCreate': res.data.dt_create.toUTCString(),
-                    'useCount': 0,
+                    'useCount': res.data.use_cnt,
                     'plan': 'regular',
                     'status': null
                 }
@@ -97,21 +99,21 @@ class ClientsController extends Controller {
             else {
                 throw Error(res.error);
             }
-        })
+        },(args) => args.headers.authorization)
         this.createMutationResolver('manageGroupMoment', async (args: MutationManageGroupMomentArgs, auth: string)=> {
             const requestId = v4();
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
             return true
-        })
+        },(args) => args.headers.authorization)
         this.createMutationResolver('manageGroupUser', async (args: MutationManageGroupUserArgs, auth: string) => {
             const requestId = v4();
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
             return true
-        })
+        },(args) => args.headers.authorization)
     }
     makeQuery = (q: Query) => {
         this.createQueryResolver('clients', async (args: QueryClientsArgs, auth: string) => {
@@ -138,7 +140,7 @@ class ClientsController extends Controller {
                     'email': r.usersEmail,
                     'phone':r.usersPhone,
                     'password': r.usersPassword,
-                    'dtCreate': 'data_fake'
+                    'dtCreate': 'fake_date'
                 }));
             }
             else {
@@ -159,6 +161,30 @@ class ClientsController extends Controller {
                 return res.data.map(r => ({
                     'groupId': r.id_group_a,
                     'groupName': r.group_name,
+                    'dtCreate': r.dt_create.toISOString(),
+                }))
+            }
+            else {
+                throw Error(res.error);
+            }
+        },(args) => args.headers.authorization)
+        this.createQueryResolver('invites', async (args: QueryInvitesArgs, auth: string) => {
+            const requestId = v4();
+            if(!auth) {
+                throw Error('MISSING_AUTH_TOKEN');
+            }
+            const res =  await appStore.hook('loadInvites', 'init', 'done', {
+                requestId,
+                input: { sessionToken: auth, 'groupId': args.input.groupId }
+                
+            })
+            if(res.ok) {
+                return res.data.map(r => ({
+                    'inviteId': r.id_group_invite,
+                    'groupId': r.id_group,
+                    'token': r.invite_token,
+                    'useCount': r.use_cnt,
+                    'plan': 'regular',
                     'dtCreate': r.dt_create.toISOString(),
                 }))
             }

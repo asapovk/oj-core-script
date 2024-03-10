@@ -5,13 +5,14 @@ import { rootRep } from "../../repository";
 import { In } from "../../__boostorm";
 import appStore from "../../_redux/app-store";
 import { AuthErrors } from "../../auth/auth.errors";
-import { _GroupA } from "../../__boostorm/entities";
+import { _GroupA, _GroupInvite } from "../../__boostorm/entities";
 
-export class UpdateGroupService extends Script<ITriggers, IState, 'updateGroup', 'init', null> {
-    public opts: ScriptOptsType<ITriggers, IState, 'updateGroup', null>;
+
+export class LoadInvites extends Script<ITriggers, IState, 'loadInvites', 'init', null> {
+    public opts: ScriptOptsType<ITriggers, IState, 'loadInvites', null>;
     private requestId: string;
     private err: string;
-    private data: boolean;
+    private data: Array<_GroupInvite> = [];
 
     constructor(opts) {
         super()
@@ -26,7 +27,9 @@ export class UpdateGroupService extends Script<ITriggers, IState, 'updateGroup',
         })
         this.opts.drop()
     }
-    async init(args: { input: { sessionToken: string, groupId: number, groupName?: string}; requestId: string; }): Promise<void> {
+
+
+    async init(args: { input: { sessionToken: string;  groupId?: number; }; requestId: string; }): Promise<void> {
         this.requestId = args.requestId;
         const userRes = await appStore.hook('getUser', 'start', 'done', {
             requestId: this.requestId,
@@ -34,37 +37,36 @@ export class UpdateGroupService extends Script<ITriggers, IState, 'updateGroup',
         })
         if(!userRes.data) {
             this.err = AuthErrors.ACCESS_DENIED
+            this.end()
             return
         }
         const userId = userRes.data.user_id;
-        const [group]: Array<_GroupA> =  await rootRep.fetch({
+        const groupsOwn: Array<_GroupA> = await rootRep.fetch({
             'table': 'group_a',
             where: {
-                'id_user':userId,
-                'id_group_a': args.input.groupId
+                'id_user': userId,
             },
-            limit: 1,
+            limit: 'infinity',
             offset: 0
         })
-        if(!group) {
-            this.err = 'GROUP_NOT_FOUND'
-        } else {
-            await rootRep.update({
-                'table': 'group_a',
-                params: {
-                    'group_name': args.input.groupName
-                },
+
+        if(groupsOwn.length) {
+            const invites: Array<_GroupInvite> = await rootRep.fetch({
+                'table': 'group_invite',
                 where: {
-                    id_group_a: args.input.groupId
-                }
+                    'id_group': In(groupsOwn.map( g => g.id_group_a))
+                },
+                limit: 'infinity',
+                offset: 0
             })
+            this.data = invites;
         }
 
         this.end();
     }
 
 
-    watch(args: WatchArgsType<ITriggers,'updateGroup'>): void {
+    watch(args: WatchArgsType<ITriggers, 'loadInvites'>): void {
             
     }
 

@@ -81,7 +81,9 @@ export type CreateGroupInput = {
 };
 
 export type CreateInviteInput = {
+  dtExpire?: InputMaybe<Scalars['String']['input']>;
   groupId: Scalars['Int']['input'];
+  nameInvite: Scalars['String']['input'];
 };
 
 export type CreatePublicLink = {

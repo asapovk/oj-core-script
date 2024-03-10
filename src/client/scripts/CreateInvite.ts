@@ -27,7 +27,13 @@ export class CreateInviteService extends Script<ITriggers, IState, 'createInvite
         })
         this.opts.drop()
     }
-    async init(args: { input: { sessionToken: string, groupId: number}; requestId: string; }): Promise<void> {
+    async init(args: { input: { 
+                sessionToken: string,  
+                inviteName: string;
+                dtExpire?: string; 
+                groupId: number
+            }; 
+            requestId: string; }): Promise<void> {
         this.requestId = args.requestId;
         const userRes = await appStore.hook('getUser', 'start', 'done', {
             requestId: this.requestId,
@@ -41,9 +47,11 @@ export class CreateInviteService extends Script<ITriggers, IState, 'createInvite
         const invite =  await rootRep.insert({
             'table': 'group_invite',
             'params': {
+                'name_invite': args.input.inviteName,
+                'dt_delete': null,
+                'dt_expire': args.input.dtExpire ?  new Date(args.input.dtExpire): null,
                 'id_group': args.input.groupId,
                 'invite_token': v4(),
-                'dt_expire': null,
             }
         })
         this.data = invite;

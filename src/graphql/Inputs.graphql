@@ -97,6 +97,8 @@ input ManageGroupMomentInput {
 }
 
 input CreateInviteInput {
+    nameInvite: String!
+    dtExpire: String
     groupId: Int!
 }
 

@@ -1,8 +1,8 @@
 import { Script } from "@reflexio/core-v1/lib/Script"
 import { IState, ITriggers } from "../../_redux/types";
 import { ScriptOptsType, WatchArgsType } from "@reflexio/core-v1/lib/types";
-import { rootRep } from "../../repository";
-import { In } from "../../__boostorm";
+import { rootRep, rootRepOpen } from "../../repository";
+import { Connection, In } from "../../__boostorm";
 import appStore from "../../_redux/app-store";
 import { AuthErrors } from "../../auth/auth.errors";
 import { _GroupA, _GroupInvite } from "../../__boostorm/entities";
@@ -49,13 +49,26 @@ export class UseGroupInviteService extends Script<ITriggers, IState, 'useGroupIn
             this.err = 'INVITATION_NOT_FOUND'
         }
         else {
-            await rootRep.insert({
-                'table': 'group_a_user_jnt',
-                params: {
-                    'id_user': userId,
-                    'id_group_a': invite.id_group,
-                    'id_public_link_session': null,
-                }
+           await Connection.runTransaction(async(t) => {
+                await rootRepOpen(t.execute).insert({
+                    'table': 'group_a_user_jnt',
+                    params: {
+                        'id_group_invite': invite.id_group_invite,
+                        'dt_expire': invite.dt_expire,
+                        'id_user': userId,
+                        'id_group_a': invite.id_group,
+                        'id_public_link_session': null,
+                    }
+                })
+                await rootRepOpen(t.execute).update({
+                    'table': 'group_invite',
+                    params: {
+                        'use_cnt': invite.use_cnt + 1,
+                    },
+                    where: {
+                        id_group_invite: invite.id_group_invite
+                    }
+                })
             })
         }
         this.end();
