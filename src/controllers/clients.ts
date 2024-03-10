@@ -69,7 +69,20 @@ class ClientsController extends Controller {
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
-            return true
+            const res =  await appStore.hook('deleteInvite', 'init', 'done', {
+                requestId,
+                input: {
+                    inviteId: args.input.inviteId,
+                    sessionToken: auth
+                }
+            })
+
+            if(res.ok) {
+                return true
+            }
+            else {
+                throw Error(res.error);
+            }
             
         },(args) => args.headers.authorization)
         this.createMutationResolver('createInvite', async (args: MutationCreateInviteArgs, auth: string)=> {
