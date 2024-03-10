@@ -135,6 +135,7 @@ class ClientsController extends Controller {
                         'dtCreate': r.groupADtCreate.toISOString(),
                         'groupName': r.groupAGroupName
                     },
+                    'dtExpire': r.groupAUserJntDtExpire ? r.groupAUserJntDtExpire.toISOString(): null,
                     'userId': r.usersUserId,
                     'username': r.usersUsername,
                     'email': r.usersEmail,
@@ -185,7 +186,10 @@ class ClientsController extends Controller {
                     'token': r.invite_token,
                     'useCount': r.use_cnt,
                     'plan': 'regular',
+                    'name': r.name_invite,
+                    'dtExpire': r.dt_expire ? r.dt_expire.toISOString():  null,
                     'dtCreate': r.dt_create.toISOString(),
+                    
                 }))
             }
             else {

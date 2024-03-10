@@ -122,7 +122,9 @@ export type Group = {
 export type Invite = {
   __typename?: 'Invite';
   dtCreate?: Maybe<Scalars['String']['output']>;
+  dtExpire?: Maybe<Scalars['String']['output']>;
   inviteId: Scalars['Int']['output'];
+  name?: Maybe<Scalars['String']['output']>;
   plan: Scalars['String']['output'];
   status?: Maybe<Scalars['String']['output']>;
   token: Scalars['String']['output'];
@@ -570,7 +572,9 @@ export type GroupResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type InviteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Invite'] = ResolversParentTypes['Invite']> = {
   dtCreate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dtExpire?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   inviteId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   plan?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

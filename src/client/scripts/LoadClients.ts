@@ -9,6 +9,7 @@ import { _GroupA } from "../../__boostorm/entities";
 
 export interface __SelectUsersOfGroupsReturn {
     groupAUserJntIdGroupAUserJnt: number,
+    groupAUserJntDtExpire: Date | null,
     usersEmail: string,
     usersUserId: number,
     usersUsername: string,
@@ -82,7 +83,6 @@ export class LoadClients extends Script<ITriggers, IState, 'loadClients', 'init'
             limit: 'infinity',
             offset: 0
         }) 
-        console.log(resp);
         return resp;
     }
 

@@ -82,6 +82,8 @@ type Invite {
   inviteId: Int!
   dtCreate: String
   status: String
+  name: String
+  dtExpire: String
   useCount: Int!
   token: String!
   plan: String!
