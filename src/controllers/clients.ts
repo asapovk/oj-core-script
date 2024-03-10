@@ -118,14 +118,42 @@ class ClientsController extends Controller {
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
-            return true
+            const res =  await appStore.hook('manageMomentsGroup', 'init', 'done', {
+                requestId,
+                input: {
+                    'groupId': args.input.groupId,
+                    'deleteLinksIds': args.input.deleteMomentIds,
+                    'addLinksIds': args.input.addMomentIds,
+                    sessionToken: auth
+                }
+            })
+            if(res.ok) {
+                return true
+            }
+            else {
+                throw Error(res.error);
+            }
         },(args) => args.headers.authorization)
         this.createMutationResolver('manageGroupUser', async (args: MutationManageGroupUserArgs, auth: string) => {
             const requestId = v4();
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
-            return true
+            const res =  await appStore.hook('manageUsersGroup', 'init', 'done', {
+                requestId,
+                input: {
+                    'groupId': args.input.groupId,
+                    'deleteUsersIds': args.input.deleteUserIds,
+                    'addUsersIds': args.input.addUserIds,
+                    sessionToken: auth
+                }
+            })
+            if(res.ok) {
+                return true
+            }
+            else {
+                throw Error(res.error);
+            }
         },(args) => args.headers.authorization)
     }
     makeQuery = (q: Query) => {

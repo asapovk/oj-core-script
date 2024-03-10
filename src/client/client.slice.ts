@@ -33,15 +33,15 @@ export interface IClientTriggers {
         init: {
             input: {
                 groupId: number;
-                addUsersIds: Array<number>;
-                deleteUsersIds: Array<number>;
+                addLinksIds: Array<number>;
+                deleteLinksIds: Array<number>;
                 sessionToken: string;
             }
             requestId: string;
         };
         done: {
             ok: boolean;
-            data?: number;
+            data?: boolean;
             error?: string;
             requestId: string
         }
@@ -50,15 +50,15 @@ export interface IClientTriggers {
         init: {
             input: {
                 groupId: number;
-                addMomentsIds: Array<number>;
-                deleteMomentsIds: Array<number>;
+                addUsersIds: Array<number>;
+                deleteUsersIds: Array<number>;
                 sessionToken: string;
             }
             requestId: string;
         };
         done: {
             ok: boolean;
-            data?: number;
+            data?: boolean;
             error?: string;
             requestId: string
         }
