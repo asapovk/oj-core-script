@@ -226,12 +226,25 @@ export type MutationUseGroupInvieteArgs = {
   input: UseGroupInviteInput;
 };
 
+export type PublicLink = {
+  __typename?: 'PublicLink';
+  dtCreate: Scalars['String']['output'];
+  group?: Maybe<Group>;
+  isAuthRequired: Scalars['Boolean']['output'];
+  linkId: Scalars['Int']['output'];
+  linkValue: Scalars['String']['output'];
+};
+
 export type PublicLinkData = {
   __typename?: 'PublicLinkData';
   end?: Maybe<Scalars['String']['output']>;
   linkValue?: Maybe<Scalars['String']['output']>;
   serieId?: Maybe<Scalars['Int']['output']>;
   start?: Maybe<Scalars['String']['output']>;
+};
+
+export type PublicLinksInput = {
+  groupId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Query = {
@@ -243,6 +256,7 @@ export type Query = {
   groups: Array<Group>;
   invites: Array<Invite>;
   loadGroupedWordStamps: Array<WordStampsGroup>;
+  publicLinks: Array<PublicLink>;
   signIn: SignInResult;
   singleSerie: Array<Serie>;
 };
@@ -265,6 +279,11 @@ export type QueryClientsArgs = {
 
 export type QueryInvitesArgs = {
   input: InvitesInput;
+};
+
+
+export type QueryPublicLinksArgs = {
+  input: PublicLinksInput;
 };
 
 
@@ -463,7 +482,9 @@ export type ResolversTypes = {
   ManageGroupMomentInput: ManageGroupMomentInput;
   ManageGroupUserInput: ManageGroupUserInput;
   Mutation: ResolverTypeWrapper<{}>;
+  PublicLink: ResolverTypeWrapper<PublicLink>;
   PublicLinkData: ResolverTypeWrapper<PublicLinkData>;
+  PublicLinksInput: PublicLinksInput;
   Query: ResolverTypeWrapper<{}>;
   SaveQuizResultInput: SaveQuizResultInput;
   Serie: ResolverTypeWrapper<Serie>;
@@ -502,7 +523,9 @@ export type ResolversParentTypes = {
   ManageGroupMomentInput: ManageGroupMomentInput;
   ManageGroupUserInput: ManageGroupUserInput;
   Mutation: {};
+  PublicLink: PublicLink;
   PublicLinkData: PublicLinkData;
+  PublicLinksInput: PublicLinksInput;
   Query: {};
   SaveQuizResultInput: SaveQuizResultInput;
   Serie: Serie;
@@ -597,6 +620,15 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   useGroupInviete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUseGroupInvieteArgs, 'input'>>;
 };
 
+export type PublicLinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicLink'] = ResolversParentTypes['PublicLink']> = {
+  dtCreate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  group?: Resolver<Maybe<ResolversTypes['Group']>, ParentType, ContextType>;
+  isAuthRequired?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  linkId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  linkValue?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PublicLinkDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicLinkData'] = ResolversParentTypes['PublicLinkData']> = {
   end?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   linkValue?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -613,6 +645,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   groups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType>;
   invites?: Resolver<Array<ResolversTypes['Invite']>, ParentType, ContextType, RequireFields<QueryInvitesArgs, 'input'>>;
   loadGroupedWordStamps?: Resolver<Array<ResolversTypes['WordStampsGroup']>, ParentType, ContextType>;
+  publicLinks?: Resolver<Array<ResolversTypes['PublicLink']>, ParentType, ContextType, RequireFields<QueryPublicLinksArgs, 'input'>>;
   signIn?: Resolver<ResolversTypes['SignInResult'], ParentType, ContextType, RequireFields<QuerySignInArgs, 'input'>>;
   singleSerie?: Resolver<Array<ResolversTypes['Serie']>, ParentType, ContextType, RequireFields<QuerySingleSerieArgs, 'input'>>;
 };
@@ -669,6 +702,7 @@ export type Resolvers<ContextType = any> = {
   Group?: GroupResolvers<ContextType>;
   Invite?: InviteResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  PublicLink?: PublicLinkResolvers<ContextType>;
   PublicLinkData?: PublicLinkDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Serie?: SerieResolvers<ContextType>;

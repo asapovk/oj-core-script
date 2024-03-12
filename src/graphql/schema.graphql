@@ -5,6 +5,7 @@ type Query {
     clients (input: ClientsInput!): [Client!]!
     groups: [Group!]!
     invites (input: InvitesInput!): [Invite!]!  
+    publicLinks (input: PublicLinksInput!): [PublicLink!]!  
     singleSerie (input: SingleSerieInput!) : [Serie!]!
     loadGroupedWordStamps: [WordStampsGroup!]!
     authenticate (input: AuthenticateInput! ) : Authenticate!

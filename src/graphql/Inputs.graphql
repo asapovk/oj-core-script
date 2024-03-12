@@ -109,3 +109,7 @@ input DeleteInviteInput {
 input UseGroupInviteInput {
     inviteToken: String! 
 }
+
+input PublicLinksInput {
+    groupId: Int
+}

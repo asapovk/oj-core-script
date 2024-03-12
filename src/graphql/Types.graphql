@@ -103,3 +103,11 @@ type Client {
     tgId: String
     password: String
 }
+
+type PublicLink {
+  linkId: Int!
+  linkValue: String!
+  isAuthRequired: Boolean!
+  dtCreate: String!
+  group: Group
+}

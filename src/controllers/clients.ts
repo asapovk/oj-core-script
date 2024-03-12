@@ -1,5 +1,5 @@
 import Controller from './controller'
-import {Mutation, MutationCreateGroupArgs, MutationCreateInviteArgs, MutationDeleleInviteArgs, MutationManageGroupMomentArgs, MutationManageGroupUserArgs, MutationUpdateGroupArgs, MutationUpdateScriptArgs, MutationUseGroupInvieteArgs, Query, QueryClientsArgs, QueryInvitesArgs, QuerySingleSerieArgs } from '../generated/graphql'
+import {Mutation, MutationCreateGroupArgs, MutationCreateInviteArgs, MutationDeleleInviteArgs, MutationManageGroupMomentArgs, MutationManageGroupUserArgs, MutationUpdateGroupArgs, MutationUpdateScriptArgs, MutationUseGroupInvieteArgs, Query, QueryClientsArgs, QueryInvitesArgs, QueryPublicLinksArgs, QuerySingleSerieArgs } from '../generated/graphql'
 import appStore from '../_redux/app-store'
 import {v4} from 'uuid'
 
@@ -231,6 +231,34 @@ class ClientsController extends Controller {
                     'dtExpire': r.dt_expire ? r.dt_expire.toISOString():  null,
                     'dtCreate': r.dt_create.toISOString(),
                     
+                }))
+            }
+            else {
+                throw Error(res.error);
+            }
+        },(args) => args.headers.authorization)
+        this.createQueryResolver('publicLinks', async (args: QueryPublicLinksArgs, auth: string) => {
+            const requestId = v4();
+            if(!auth) {
+                throw Error('MISSING_AUTH_TOKEN');
+            }
+            const res =  await appStore.hook('loadPublicLinks', 'init', 'done', {
+                requestId,
+                input: { sessionToken: auth, 'groupId': args.input.groupId }
+                
+            })
+            if(res.ok) {
+                return res.data.map(r => ({
+                 'dtCreate':  r.groupAPublicLinkJntDtCreate.toISOString(),
+                 'linkId': r.publicLinkIdPublicLink,
+                 'linkValue': r.publicLinkLinkValue,
+                 'isAuthRequired': r.publicLinkIsAuthRequired,
+                 'group': {
+                    'groupId': r.groupAIdGroupA,
+                    'groupName': r.groupAGroupName,
+                    'dtCreate': r.groupADtCreate.toISOString(),
+
+                 },
                 }))
             }
             else {
