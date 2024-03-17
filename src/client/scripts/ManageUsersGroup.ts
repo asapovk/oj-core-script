@@ -38,6 +38,7 @@ export class ManageUsersGrupu extends Script<ITriggers, IState, 'manageUsersGrou
             requestId: this.requestId,
             'input': {'session_uuid': args.input.sessionToken}
         })
+        console.log('INIT');
         if(!userRes.data) {
             this.err = AuthErrors.ACCESS_DENIED
             this.end();
@@ -60,7 +61,7 @@ export class ManageUsersGrupu extends Script<ITriggers, IState, 'manageUsersGrou
         else  {
         await Connection.runTransaction( async (t) => {
             for(let add of args.input.addUsersIds) {
-                await rootRepOpen(t.execute).insert({
+                const inserted = await rootRepOpen(t.execute).insert({
                     'table': 'group_a_user_jnt',
                     params: {
                         'dt_expire': null,
@@ -70,13 +71,16 @@ export class ManageUsersGrupu extends Script<ITriggers, IState, 'manageUsersGrou
                         'id_user':add
                     }
                 })
+                console.log(inserted);
             }
+            if(args.input.deleteUsersIds.length) {
             await rootRepOpen(t.execute).delete({
                 'table': 'group_a_user_jnt',
                 where: {
                     'id_user': In(args.input.deleteUsersIds)
                 }
             })
+            }
         })
         }
 

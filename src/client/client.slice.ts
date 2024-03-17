@@ -13,6 +13,7 @@ import { DeleteInviteService } from "./scripts/DeleteInvite";
 import { UseGroupInviteService } from "./scripts/UseGroupInvite";
 import { LoadInvites } from "./scripts/LoadInvites";
 import { LoadPublicLinks, __SelectLinksOfGroupsReturn } from "./scripts/LoadPublicLinks";
+import { ManageUsersGrupu } from "./scripts/ManageUsersGroup";
 
 export interface IClientTriggers {
     useGroupInvite: TriggerPhaseWrapper<{
@@ -273,6 +274,15 @@ export const clientsSlice = Slice<IClientTriggers, ITriggers, null, IState>(
                         //@ts-ignore
            'updateOn': ['loadPublicLinks'],
            'script': LoadPublicLinks
+    }),
+                    //@ts-ignore
+    'manageUsersGroup': Bite(null, {
+        //@ts-ignore
+    'triggerStatus': 'init',
+    'instance': 'refreshing',
+        //@ts-ignore
+    'updateOn': ['manageUsersGroup'],
+    'script': ManageUsersGrupu
     }),
     }, null
     
