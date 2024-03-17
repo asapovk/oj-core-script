@@ -10,10 +10,12 @@ class ClientsController extends Controller {
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
-            const res =  await appStore.hook('createGroup', 'init', 'done', {
+            const res =  await appStore.hook('useGroupInvite', 'init', 'done', {
                 requestId,
                 input: {
-                    'groupName': args.input.inviteToken,
+                    'password': args.input.password,
+                    'login': args.input.email,
+                    'inviteToken': args.input.inviteToken,
                     sessionToken: auth
                 }
             })

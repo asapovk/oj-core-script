@@ -18,6 +18,8 @@ export interface IClientTriggers {
     useGroupInvite: TriggerPhaseWrapper<{
         init: {
             input: {
+                login: string;
+                password: string;
                 inviteToken: string;
                 sessionToken: string;
             }

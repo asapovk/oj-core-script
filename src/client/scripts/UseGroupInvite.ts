@@ -6,6 +6,8 @@ import { Connection, In } from "../../__boostorm";
 import appStore from "../../_redux/app-store";
 import { AuthErrors } from "../../auth/auth.errors";
 import { _GroupA, _GroupInvite } from "../../__boostorm/entities";
+import {v4} from 'uuid'
+import { _Users } from "../../repository/entities";
 
 export class UseGroupInviteService extends Script<ITriggers, IState, 'useGroupInvite', 'init', null> {
     public opts: ScriptOptsType<ITriggers, IState, 'useGroupInvite', null>;
@@ -26,36 +28,49 @@ export class UseGroupInviteService extends Script<ITriggers, IState, 'useGroupIn
         })
         this.opts.drop()
     }
-    async init(args: { input: { sessionToken: string, inviteToken: string}; requestId: string; }): Promise<void> {
+    async init(args: { input: {inviteToken: string,  login: string; password: string}; requestId: string; }): Promise<void> {
         this.requestId = args.requestId;
-        const userRes = await appStore.hook('getUser', 'start', 'done', {
-            requestId: this.requestId,
-            'input': {'session_uuid': args.input.sessionToken}
-        })
-        if(!userRes.data) {
-            this.err = AuthErrors.ACCESS_DENIED
-            return
-        }
-        const userId = userRes.data.user_id;
-        const [invite]: Array<_GroupInvite> = await rootRep.fetch({
-            'table': 'group_invite',
-            where: {
-                'invite_token': args.input.inviteToken,
-            },
-            limit: 1,
-            offset: 0
-        })
-        if(!invite) {
-            this.err = 'INVITATION_NOT_FOUND'
-        }
-        else {
+
            await Connection.runTransaction(async(t) => {
+            const [invite]: Array<_GroupInvite> = await rootRepOpen(t.execute).fetch({
+                'table': 'group_invite',
+                'where': {
+                    'invite_token': args.input.inviteToken,
+                    'dt_delete': null,
+                },
+                limit: 1,
+                offset: 0
+            })
+            if(!invite) {
+                this.err = 'INVITE_NOT_FOUND'
+                return;
+            }
+            const user: _Users = await rootRepOpen(t.execute).insert({
+                'table': 'users',
+                params: {
+                    'dt_delete': null,
+                    'dt_last_login': null,
+                    'dt_subsc_last_pay': null,
+                    'info': null,
+                    'phone': null,
+                    'phone_confirm_code': null,
+                    'ig_uid': null,
+                    'tg_uid': null,
+                    'email_confirm_token': null,
+                    'vk_uid': null,
+                    'user_uuid': v4(),
+                    'password': args.input.password,
+                    'username': args.input.login,
+                    'email': args.input.login,
+                    
+                }
+            })
                 await rootRepOpen(t.execute).insert({
                     'table': 'group_a_user_jnt',
                     params: {
                         'id_group_invite': invite.id_group_invite,
                         'dt_expire': invite.dt_expire,
-                        'id_user': userId,
+                        'id_user': user.user_id,
                         'id_group_a': invite.id_group,
                         'id_public_link_session': null,
                     }
@@ -70,7 +85,6 @@ export class UseGroupInviteService extends Script<ITriggers, IState, 'useGroupIn
                     }
                 })
             })
-        }
         this.end();
     }
 
