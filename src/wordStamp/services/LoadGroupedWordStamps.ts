@@ -106,6 +106,9 @@ export class LoadGroupedWordStamps extends ServiceScript<ITriggers, IState, 'loa
             throw new Error(WordStampErorrs.WORD_STAMP_SYSTEM_ERR);
             //this.endError(WordStampErorrs.WORD_STAMP_SYSTEM_ERR) 
         } finally {
+            if(this.err) {
+                throw new Error(this.err)
+            }
             return this.data;
             // this.opts.setStatus('done', {
             //     data: this.data,

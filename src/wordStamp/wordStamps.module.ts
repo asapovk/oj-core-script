@@ -35,7 +35,7 @@ export interface IWordStampTriggers {
 
 
 
-export const wordStampsSlice = Slice<IWordStampTriggers,  any, ITriggers, IState>('serie', {
+export const wordStampsSlice = Slice<IWordStampTriggers,  any, ITriggers, IState>('wordStamp', {
     'loadGroupedWordStamps': biteRequest('loadGroupedWordStamps', LoadGroupedWordStamps, {dao: rootRep}),
     saveWordStamp: biteRequest('saveWordStamp', SaveWordStampService, {dao: rootRep}),
     'loadChaptersOfStamps': biteRequest('loadChaptersOfStamps', LoadChaptersOfStamps, {dao: rootRep}),

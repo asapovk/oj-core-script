@@ -10,12 +10,14 @@ class AuthController extends Controller {
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
-            const res =  await appStore.hook('updateScript', 'start', 'done', {
+            const res =  await appStore.hook('updateScript', 'init', 'done', {
                 requestId,
-                sessionId: auth,
-                input: {
-                    'script': args.input.body,
-                    serie_id: args.input.serieId,
+                data: {
+                    sessionId: auth,
+                    input: {
+                        'script': args.input.body,
+                        serie_id: args.input.serieId,
+                    }
                 }
             })
             if(res.ok) {
@@ -32,11 +34,12 @@ class AuthController extends Controller {
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
-            const res =  await appStore.hook('loadSerie', 'start', 'done', {
+            const res =  await appStore.hook('loadSerie', 'init', 'done', {
                 requestId,
-                input: {
+                data: {
                     serie_id: args.input.serieId
                 }
+
             })
             if(res.ok) {
                 return [{

@@ -1,4 +1,4 @@
-import { ScriptInitArgsType, ScriptOptsType } from "@reflexio/reflexio-on-redux/lib/types";
+import { ScriptOptsType } from "@reflexio/core-v1/lib/types";
 import { _Series, _WordStamps } from "../../__boostorm/entities";
 import { CreateWordStampInput, IWordStampTriggers } from "../wordStamps.module";
 import { IState, ITriggers } from "../../_redux/types";
@@ -7,33 +7,15 @@ import { rootRep } from "../../repository";
 import { WordStampErorrs } from "../wordStamps.error";
 import appStore from "../../_redux/app-store";
 import { _LoadGroupedWordStamps } from "../dto/_loadGroupedWordStamps";
+import { ServiceScript } from "../../service-bite/ServiceScript";
+import { InitArgsType } from "@reflexio/core-v1/lib/types";
 
-export class SaveWordStampService {
-    constructor(private opts: ScriptOptsType<IWordStampTriggers, ITriggers, IState, 'saveWordStamp'>) {}
-    private requestId: string;
+export class SaveWordStampService extends ServiceScript<ITriggers, IState,'saveWordStamp', 'init' > {
+    constructor(opts: ScriptOptsType<ITriggers, IState, 'saveWordStamp', 'init'>) {
+        super(opts)
+    }
     private data: number = null;
     private err: string = null;
-
-    private endError(err: string) {
-        this.opts.setStatus('done', {
-            data: null,
-            'err': err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
-
-    private endSuccess(data: number) {
-        this.opts.setStatus('done', {
-            data: data,
-            'err': this.err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
-
 
     private async saveWordStamp(input: CreateWordStampInput, user_uuid: string): Promise<_WordStamps> {
         return await rootRep.insert({
@@ -62,24 +44,17 @@ export class SaveWordStampService {
             requestId: this.requestId,
         })
         if(!res.ok) {
-            this.opts.setStatus('done', {
-                'ok': false,
-                requestId: this.requestId,
-                'err': res.err,
-                data: null,
-            })
-            this.opts.drop();
+            throw new Error(res.err)
         }
 
         return res;
     }
 
-    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'saveWordStamp', 'init'>) {
+    public async request (args: InitArgsType<IWordStampTriggers, 'saveWordStamp', 'init'>) {
         this.requestId = args.requestId;
         const authRes = await this.check(args.data.sessionId);
         if(!authRes.data) {
-            this.endError('WRONG_SESION');
-            return
+            throw new Error('WRONG_SESION');
         }
 
         try {
@@ -91,16 +66,15 @@ export class SaveWordStampService {
                 this.err = WordStampErorrs.WORD_STAMP_SYSTEM_ERR
             }
         } catch (err) {
-            this.endError(WordStampErorrs.WORD_STAMP_SYSTEM_ERR) 
-            return
+            throw new Error(WordStampErorrs.WORD_STAMP_SYSTEM_ERR) 
+
         } finally {
-            this.opts.setStatus('done', {
-                data: this.data,
-                ok: !Boolean(this.err),
-                err: this.err,
-                requestId: this.requestId
-            })
-            this.opts.drop();
+            if(this.err) {
+                throw new Error(this.err);
+            }
+            else {
+                return this.data
+            }
         }
     } 
 }

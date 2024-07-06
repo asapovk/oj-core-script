@@ -1,4 +1,4 @@
-import { ScriptInitArgsType, ScriptOptsType } from "@reflexio/reflexio-on-redux/lib/types";
+import { InitArgsType, ScriptOptsType } from "@reflexio/core-v1/lib/types";
 import { _Chapters, _Series, _WordStamps } from "../../__boostorm/entities";
 import { IWordStampTriggers } from "../wordStamps.module";
 import { IState, ITriggers } from "../../_redux/types";
@@ -7,22 +7,24 @@ import { rootRep } from "../../repository";
 import { WordStampErorrs } from "../wordStamps.error";
 import appStore from "../../_redux/app-store";
 import { _LoadGroupedWordStamps } from "../dto/_loadGroupedWordStamps";
+import { ServiceScript } from "../../service-bite/ServiceScript";
 
-export class LoadChaptersOfStamps {
-    constructor(private opts: ScriptOptsType<IWordStampTriggers, ITriggers, IState, 'loadChaptersOfStamps'>) {}
-    private requestId: string;
+export class LoadChaptersOfStamps extends ServiceScript<ITriggers, IState, 'loadChaptersOfStamps', 'init'> {
+    constructor(opts: ScriptOptsType<ITriggers, IState, 'loadChaptersOfStamps', 'init'>) {
+        super(opts)
+    }
     private data: Array<_Chapters> = null;
     private err: string = null;
 
-    private end(err: string | null) {
-        this.opts.setStatus('done', {
-            'data': this.data,
-            'err': err || null,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
+    // private end(err: string | null) {
+    //     this.opts.setStatus('done', {
+    //         'data': this.data,
+    //         'err': err || null,
+    //         'requestId': this.requestId,
+    //         'ok': !Boolean(this.err)
+    //     })
+    //     this.opts.drop()
+    // }
 
 
     private async loadChapters(ids: Array<number>): Promise<Array<_Chapters>> {
@@ -36,15 +38,17 @@ export class LoadChaptersOfStamps {
         })
     }
 
-    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'loadChaptersOfStamps', 'init'>) {
+    async request(args: InitArgsType<IWordStampTriggers, 'loadChaptersOfStamps', 'init'>) {
         this.requestId = args.requestId;
         try {
             this.data = await this.loadChapters(args.data);
         } catch (err) {
-            this.end(WordStampErorrs.WORD_STAMP_SYSTEM_ERR) 
-            return
+            throw new Error(WordStampErorrs.WORD_STAMP_SYSTEM_ERR) 
         } finally {
-           this.end(this.err);
+            if(this.err) {
+                throw new Error(this.err)
+            }
+           return this.data
         }
     } 
 }

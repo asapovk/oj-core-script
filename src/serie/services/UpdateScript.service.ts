@@ -5,32 +5,14 @@ import { ISerireTriggers } from "../serie.module";
 import { _ScriptsProcessed, _Series } from "../../__boostorm/entities";
 import appStore from "../../_redux/app-store";
 import { SerieErorrs } from "../serie.error";
+import { ServiceScript } from "../../service-bite/ServiceScript";
 
-export class UpdateScriptService {
+export class UpdateScriptService extends ServiceScript<ITriggers, IState, 'updateScript', 'init'> {
 
-    constructor(private opts: ScriptOptsType<ISerireTriggers, ITriggers, IState, 'updateScript'>) {}
-    private requestId: string;
+    constructor(opts: ScriptOptsType<ISerireTriggers, ITriggers, IState, 'updateScript'>) {
+        super(opts)
+    }
     private err: string = null;
-
-    private endError(err: string) {
-        this.opts.setStatus('done', {
-
-            'err': err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
-
-    private endSuccess() {
-        this.opts.setStatus('done', {
-            'err': this.err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
-
 
     private async check(sessionId: string) {
         const res = await appStore.hook('getUser', 'start', 'done', {
@@ -40,12 +22,7 @@ export class UpdateScriptService {
             requestId: this.requestId,
         })
         if(!res.ok) {
-            this.opts.setStatus('done', {
-                'ok': false,
-                requestId: this.requestId,
-                'err': res.err,
-            })
-            this.opts.drop();
+            throw new Error(res.err)
         }
 
         return res;
@@ -71,44 +48,38 @@ export class UpdateScriptService {
                 }
         })
     }
-    public async init(args: ScriptInitArgsType<ITriggers, 'updateScript', 'start'>) {
+    public async request(args: ScriptInitArgsType<ITriggers, 'updateScript', 'init'>) {
         this.requestId = args.requestId;
-        const authRes = await this.check(args.sessionId);
+        const authRes = await this.check(args.requestId);
         if(!authRes.data) {
             return
         }
         let err: string = null;
         let ok: boolean = false;
         try {
-            const scripts: Array<_ScriptsProcessed> = await this.getScript(args.input.serie_id)
+            const scripts: Array<_ScriptsProcessed> = await this.getScript(args.data.input.serie_id)
             if(scripts.length) {
             const script_Id: number = scripts[0].script_id;
             let body  = null;
             try {
-                body = JSON.parse(args.input.script);
+                body = JSON.parse(args.data.input.script);
             } catch (error) {
-                this.endError(SerieErorrs.SERIE_SCRIPT_NOT_PROVIDED) 
-                return
+                throw new Error(SerieErorrs.SERIE_SCRIPT_NOT_PROVIDED) 
             }
             if(body) {
                 const res =  await this.createScriptUpdate(authRes.data.user_id,script_Id, body)
                 if(res) {
-                    this.endSuccess()
-                    return
+                    return res
                  }
-                 this.endError(SerieErorrs.SERIE_NOT_FOUND) 
-                 return
+                 throw new Error(SerieErorrs.SERIE_NOT_FOUND) 
             }
-            this.endError(SerieErorrs.SERIE_SCRIPT_NOT_PROVIDED) 
-            return
+            throw new Error (SerieErorrs.SERIE_SCRIPT_NOT_PROVIDED) 
         }
         else {
-            this.endError(SerieErorrs.SERIE_SYSTEM_ERR) 
-            return
+            throw new Error(SerieErorrs.SERIE_SYSTEM_ERR) 
         }
         } catch (err) {
-            this.endError(SerieErorrs.SERIE_SYSTEM_ERR) 
-            return
+            throw new Error(SerieErorrs.SERIE_SYSTEM_ERR) 
         }
     }   
 

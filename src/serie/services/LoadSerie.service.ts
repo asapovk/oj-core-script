@@ -6,34 +6,16 @@ import { join } from "path";
 import { _ScriptUpdate, _ScriptsProcessed, _Series } from "../../__boostorm/entities";
 import { SerieErorrs } from "../serie.error";
 import { OrderBy } from "../../__boostorm";
+import { ServiceScript } from "../../service-bite/ServiceScript";
 
 
-export class LoadSerieService {
+export class LoadSerieService extends ServiceScript<ITriggers, IState, 'loadSerie', 'init'> {
 
-    constructor(private opts: ScriptOptsType<ISerireTriggers, ITriggers, IState, 'loadSerie'>) {}
-    private requestId: string;
+    constructor(opts: ScriptOptsType<ISerireTriggers, ITriggers, IState, 'loadSerie'>) {
+        super(opts)
+    }
     private data: _Series & { script: JSON } = null;
     private err: string = null;
-
-    private endError(err: string) {
-        this.opts.setStatus('done', {
-            'data': this.data,
-            'err': err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
-
-    private endSuccess(data: _Series & { script: JSON }) {
-        this.opts.setStatus('done', {
-            'data': data,
-            'err': this.err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
 
 
     private async loadScriptUpdate(scriptId: number): Promise<Array<_ScriptUpdate>> {
@@ -63,46 +45,43 @@ export class LoadSerieService {
         })
     }
 
-    public async init(args: ScriptInitArgsType<ISerireTriggers, 'loadSerie', 'start'>) {
+    public async request(args: ScriptInitArgsType<ISerireTriggers, 'loadSerie', 'init'>) {
         this.requestId = args.requestId;
         let script: JSON = null;
 
         try {
-            const seriesWithScript = await this.loadSerieWithScript(args.input.serie_id);
+            const seriesWithScript = await this.loadSerieWithScript(args.data.serie_id);
             if(!seriesWithScript.length) {
-                this.endError(SerieErorrs.SERIE_NOT_FOUND) 
-                return
+                throw new Error(SerieErorrs.SERIE_NOT_FOUND) 
+                
             }
             if(!seriesWithScript[0].scripts.length) {
-                this.endError(SerieErorrs.SERIE_SCRIPT_NOT_FOUND) 
-                return 
+                throw new Error(SerieErorrs.SERIE_SCRIPT_NOT_FOUND) 
             }
             const scriptId = seriesWithScript[0].scripts[0].script_id;
             const scriptUpds = await this.loadScriptUpdate(scriptId);
             if(!scriptUpds.length) {
                 script = seriesWithScript[0].scripts[0].body
-                this.endSuccess({
+                return {
                     ...seriesWithScript[0],
                     'script': script,
-                })
-                return 
+                }
             }
-            this.endSuccess({
+            return  {
                 ...seriesWithScript[0],
                 'script': scriptUpds[0].script_body,
-            })
+            }
             
         } catch (err) {
-            this.endError(SerieErorrs.SERIE_SYSTEM_ERR) 
-            return
+            throw new Error(SerieErorrs.SERIE_SYSTEM_ERR)
+            
         } finally {
-            this.opts.setStatus('done', {
-                data: this.data,
-                ok: !Boolean(this.err),
-                err: this.err,
-                requestId: this.requestId
-            })
-            this.opts.drop();
+            console.log('FINALLY');
+        
+            if(this.err) {
+                throw new Error(this.err)
+            }
+            //return this.data
         }
     }   
 }
