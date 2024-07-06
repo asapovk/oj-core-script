@@ -10,7 +10,8 @@ export  abstract class ServiceScript<RTg, RSt, Bitename extends keyof RTg, PhK e
     protected opts: ScriptOptsType<RTg, RSt, Bitename, Inj>;
     protected dao: Repository;
     protected requestId: string;
-    abstract request (args: InitArgsType<RTg, Bitename, PhK>): Promise<void>;
+    //@ts-ignore
+    abstract request (args: InitArgsType<RTg, Bitename, PhK>): Promise<InitArgsType<RTg, Bitename, 'done'>['data']>;
 
 
     //abstract watch(args: WatchArgsType<RTg, Bitename>): void;
@@ -28,6 +29,8 @@ export  abstract class ServiceScript<RTg, RSt, Bitename extends keyof RTg, PhK e
         let err = null; 
         try {
             result  = await this.request(args);
+            console.log('RESULT');
+            console.log(result);
         } catch(err) {
             console.log(err);
             err = 'error';
@@ -37,6 +40,7 @@ export  abstract class ServiceScript<RTg, RSt, Bitename extends keyof RTg, PhK e
             requestId: this.requestId,
             data: result,
             err,
+            ok: !Boolean(err)
         });
     };
 }

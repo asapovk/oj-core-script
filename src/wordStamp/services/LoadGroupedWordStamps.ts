@@ -7,36 +7,40 @@ import { rootRep } from "../../repository";
 import { WordStampErorrs } from "../wordStamps.error";
 import appStore from "../../_redux/app-store";
 import { _LoadGroupedWordStamps } from "../dto/_loadGroupedWordStamps";
+import { ServiceScript } from "../../service-bite/ServiceScript";
 
-export class LoadGroupedWordStamps {
-    constructor(private opts: ScriptOptsType<IWordStampTriggers, ITriggers, IState, 'loadGroupedWordStamps'>) {}
-    private requestId: string;
+export class LoadGroupedWordStamps extends ServiceScript<ITriggers, IState, 'loadGroupedWordStamps', 'init'> {
+    
+    constructor(opts: ScriptOptsType<IWordStampTriggers, ITriggers, IState, 'loadGroupedWordStamps'>) {
+        super(opts);
+    }
     private data:Array<_LoadGroupedWordStamps> = null;
     private err: string = null;
 
-    private endError(err: string) {
-        this.opts.setStatus('done', {
-            'data': this.data,
-            'err': err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
+    // private endError(err: string) {
 
-    private endSuccess(data: Array<_LoadGroupedWordStamps> ) {
-        this.opts.setStatus('done', {
-            'data': data,
-            'err': this.err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
+    //     this.opts.setStatus('done', {
+    //         'data': this.data,
+    //         'err': err,
+    //         'requestId': this.requestId,
+    //         'ok': !Boolean(this.err)
+    //     })
+    //     this.opts.drop()
+    // }
+
+    // private endSuccess(data: Array<_LoadGroupedWordStamps> ) {
+    //     this.opts.setStatus('done', {
+    //         'data': data,
+    //         'err': this.err,
+    //         'requestId': this.requestId,
+    //         'ok': !Boolean(this.err)
+    //     })
+    //     this.opts.drop()
+    // }
 
 
     private async loadGroupedWordStamps(user_uuid: string): Promise<Array<_LoadGroupedWordStamps>> {
-        return await rootRep.select({
+        return await this.dao.select({
             'from': 'series',
             'join': {
                 'chapters': {
@@ -87,28 +91,29 @@ export class LoadGroupedWordStamps {
 
         return res;
     }
+    
 
-    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'loadGroupedWordStamps', 'init'>) {
+    public async request(args: ScriptInitArgsType<IWordStampTriggers, 'loadGroupedWordStamps', 'init'>) {
         this.requestId = args.requestId;
         const authRes = await this.check(args.data.sessionId);
         if(!authRes.data) {
-            this.endError('WRONG_SESION');
-            return
+            throw new Error('WRONG_SESION');
         }
 
         try {
             this.data = await this.loadGroupedWordStamps(authRes.data.user_uuid);
         } catch (err) {
-            this.endError(WordStampErorrs.WORD_STAMP_SYSTEM_ERR) 
-            return
+            throw new Error(WordStampErorrs.WORD_STAMP_SYSTEM_ERR);
+            //this.endError(WordStampErorrs.WORD_STAMP_SYSTEM_ERR) 
         } finally {
-            this.opts.setStatus('done', {
-                data: this.data,
-                ok: !Boolean(this.err),
-                err: this.err,
-                requestId: this.requestId
-            })
-            this.opts.drop();
+            return this.data;
+            // this.opts.setStatus('done', {
+            //     data: this.data,
+            //     ok: !Boolean(this.err),
+            //     err: this.err,
+            //     requestId: this.requestId
+            // })
+            // this.opts.drop();
         }
     } 
 }

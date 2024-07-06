@@ -9,6 +9,7 @@ import { SaveWordStampService } from "./services/SaveWordStamp";
 import { biteRequest } from "../service-bite/serviceBite";
 import { BiteStatusWrap } from "@reflexio/core-v1/lib/types";
 import { RequestTriggers } from "../service-bite/types";
+import { rootRep } from "../repository";
 
 // load init serie on app start 
 // trigger in controller load serie // save result to state with requestId
@@ -35,7 +36,7 @@ export interface IWordStampTriggers {
 
 
 export const wordStampsSlice = Slice<IWordStampTriggers,  any, ITriggers, IState>('serie', {
-    'loadGroupedWordStamps': biteRequest('loadGroupedWordStamps', LoadGroupedWordStamps),
-    saveWordStamp: biteRequest('saveWordStamp', SaveWordStampService),
-    'loadChaptersOfStamps': biteRequest('loadChaptersOfStamps', LoadChaptersOfStamps),
+    'loadGroupedWordStamps': biteRequest('loadGroupedWordStamps', LoadGroupedWordStamps, {dao: rootRep}),
+    saveWordStamp: biteRequest('saveWordStamp', SaveWordStampService, {dao: rootRep}),
+    'loadChaptersOfStamps': biteRequest('loadChaptersOfStamps', LoadChaptersOfStamps, {dao: rootRep}),
 }, {})

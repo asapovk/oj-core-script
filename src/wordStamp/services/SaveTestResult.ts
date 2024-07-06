@@ -74,7 +74,7 @@ export class SateTEstResultScript {
         return res;
     }
 
-    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'saveWordStamp', 'start'>) {
+    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'saveWordStamp', 'init'>) {
 
     } 
 }

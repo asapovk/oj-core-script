@@ -35,17 +35,20 @@ class WordStampController extends Controller {
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
-            const res =  await appStore.hook('saveWordStamp', 'start', 'done', {
+            const res =  await appStore.hook('saveWordStamp', 'init', 'done', {
                 requestId,
-                sessionId: auth,
-                input: {
-                    'chapterId': args.input.chapterId,
-                    'kana': args.input.kana,
-                    'serieId': args.input.serieId,
-                    'writing': args.input.writing,
-                    'transcription': args.input.transcription,
-                    'translation': args.input.translation
-                }
+                'data': {
+                    sessionId: auth,
+                    input: {
+                        'chapterId': args.input.chapterId,
+                        'kana': args.input.kana,
+                        'serieId': args.input.serieId,
+                        'writing': args.input.writing,
+                        'transcription': args.input.transcription,
+                        'translation': args.input.translation
+                    }
+                },
+                
             })
             if(res.ok) {
                 return res.data
@@ -61,9 +64,11 @@ class WordStampController extends Controller {
             if(!auth) {
                 throw Error('MISSING_AUTH_TOKEN');
             }
-            const res =  await appStore.hook('loadGroupedWordStamps', 'start', 'done', {
+            const res =  await appStore.hook('loadGroupedWordStamps', 'init', 'done', {
                 requestId,
-                sessionId: auth
+                data: {
+                    sessionId: auth
+                }
             })
             if(res.ok) {
                 return res.data.map(d => ({
@@ -88,9 +93,9 @@ class WordStampController extends Controller {
         },(args) => args.headers.authorization)
         this.createQueryResolver('chapters', async (args: QueryChaptersArgs) => {
             const requestId = v4();
-            const res =  await appStore.hook('loadChaptersOfStamps', 'start', 'done', {
+            const res =  await appStore.hook('loadChaptersOfStamps', 'init', 'done', {
                 requestId,
-                input: args.input.chapterIds
+                data: args.input.chapterIds
             })
             if(res.ok) {
                 return res.data.map(d => ({
