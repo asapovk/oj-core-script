@@ -74,16 +74,16 @@ export class SaveWordStampService {
         return res;
     }
 
-    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'saveWordStamp', 'start'>) {
+    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'saveWordStamp', 'init'>) {
         this.requestId = args.requestId;
-        const authRes = await this.check(args.sessionId);
+        const authRes = await this.check(args.data.sessionId);
         if(!authRes.data) {
             this.endError('WRONG_SESION');
             return
         }
 
         try {
-            const res  = await this.saveWordStamp(args.input, authRes.data.user_uuid);
+            const res  = await this.saveWordStamp(args.data.input, authRes.data.user_uuid);
             if(res) {
                 this.data = res.word_stamp_id;
             }

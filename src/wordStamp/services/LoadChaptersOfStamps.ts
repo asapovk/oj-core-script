@@ -36,10 +36,10 @@ export class LoadChaptersOfStamps {
         })
     }
 
-    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'loadChaptersOfStamps', 'start'>) {
+    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'loadChaptersOfStamps', 'init'>) {
         this.requestId = args.requestId;
         try {
-            this.data = await this.loadChapters(args.input);
+            this.data = await this.loadChapters(args.data);
         } catch (err) {
             this.end(WordStampErorrs.WORD_STAMP_SYSTEM_ERR) 
             return

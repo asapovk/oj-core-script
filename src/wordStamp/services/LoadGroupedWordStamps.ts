@@ -88,9 +88,9 @@ export class LoadGroupedWordStamps {
         return res;
     }
 
-    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'loadGroupedWordStamps', 'start'>) {
+    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'loadGroupedWordStamps', 'init'>) {
         this.requestId = args.requestId;
-        const authRes = await this.check(args.sessionId);
+        const authRes = await this.check(args.data.sessionId);
         if(!authRes.data) {
             this.endError('WRONG_SESION');
             return
