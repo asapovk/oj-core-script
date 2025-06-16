@@ -25,7 +25,23 @@ export interface RepositoryOpts {
   schema: Schema;
 }
 
-class Repository {
+export interface IRepository {
+  insert<T extends keyof EntitieTypes._Entities>(args: InsertArgs<T>): Promise<any>
+  update<T extends keyof EntitieTypes._Entities>(args: UpdateArgs<T>): Promise<number>
+  delete<T extends keyof EntitieTypes._Entities>(args: DeleteArgs<T>): Promise<number>
+  fetch<T extends keyof EntitieTypes._Entities>(args: FetchArgs<T>): Promise<any>
+  select<
+    T extends keyof EntitieTypes._Entities,
+    L extends keyof EntitieTypes._Entities[T]['entitie'],
+    M extends keyof EntitieTypes._Entities[T]['entitie'],
+    A extends {
+      [key in keyof EntitieTypes._Entities]: EntitieTypes._Entities[key];
+    },
+  >(args: SelectArgs<T, L, M, A>): Promise<any>
+
+}
+
+class Repository implements IRepository {
   private opts: RepositoryOpts;
   constructor(opts: RepositoryOpts) {
     this.opts = opts;

@@ -12,8 +12,8 @@ export class Transaction {
   }
 
   public execute = async (query: string, params?: Array<unknown>) => {
-    console.log(query);
-    console.log(params);
+    //console.log(query);
+    //console.log(params);
     return await this.client.query(query, params);
   };
 

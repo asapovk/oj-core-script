@@ -25,6 +25,9 @@ export class CheckSessionService {
             'input': {'session_uuid': args.input.sessionToken}
         })
         if(!userRes.data) {
+            if(userRes.err) {
+                console.log('ERROR', userRes.err);
+            }
             console.log('no user data')
             this.err = AuthErrors.ACCESS_DENIED
             return

@@ -7,52 +7,23 @@ import { rootRep } from "../../repository";
 import { WordStampErorrs } from "../wordStamps.error";
 import appStore from "../../_redux/app-store";
 import { _LoadGroupedWordStamps } from "../dto/_loadGroupedWordStamps";
+import { ServiceScript } from "../../service-bite/ServiceScript";
 
-export class SateTEstResultScript {
-    constructor(private opts: ScriptOptsType<IWordStampTriggers, ITriggers, IState, 'saveWordStamp'>) {}
-    private requestId: string;
+export class SateTEstResultScript extends ServiceScript<ITriggers, IState, 'saveQuizResult', 'init'> {
+    constructor(opts: ScriptOptsType<IWordStampTriggers, ITriggers, IState, 'saveWordStamp'>) {
+        super(opts)
+    }
     private data: number = null;
     private err: string = null;
 
-    private endError(err: string) {
-        this.opts.setStatus('done', {
-            data: null,
-            'err': err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
-
-    private endSuccess(data: number) {
-        this.opts.setStatus('done', {
-            data: data,
-            'err': this.err,
-            'requestId': this.requestId,
-            'ok': !Boolean(this.err)
-        })
-        this.opts.drop()
-    }
-
-
-    private async saveWordStamp(input: CreateWordStampInput, user_uuid: string): Promise<_WordStamps> {
-        return await rootRep.insert({
-            'table': 'word_stamps',
-            'params': {
-                'chapter_id': input.chapterId,
-                'kana': input.kana,
-                'serie_id': input.serieId,
-                writing: input.writing,
-                'primary_translation':  input.translation,
-                'transcription': input.transcription,
-                'hint': null,
-                'user_uuid': user_uuid,
-                'origin_audio_url': null,
-                'female_voice_url': null,
-                'orign': 's'
-            }
-        })
-    }
+    // private async saveWordStamp(input: CreateWordStampInput, user_uuid: string): Promise<_WordStamps> {
+    //     return await rootRep.insert({
+    //         'table': 'user_quiz',
+    //         'params': {
+                
+    //         }
+    //     })
+    // }
 
     private async check(sessionId: string) {
         const res = await appStore.hook('getUser', 'start', 'done', {
@@ -74,7 +45,7 @@ export class SateTEstResultScript {
         return res;
     }
 
-    public async init(args: ScriptInitArgsType<IWordStampTriggers, 'saveWordStamp', 'init'>) {
-
+    public async request(args: ScriptInitArgsType<IWordStampTriggers, 'saveWordStamp', 'init'>) {
+        return null
     } 
 }

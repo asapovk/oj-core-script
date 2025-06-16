@@ -28,7 +28,7 @@ export class UpdateScriptService extends ServiceScript<ITriggers, IState, 'updat
         return res;
     }
     private async createScriptUpdate(userId: number, scriptId: number, body: JSON) {
-        return await rootRep.insert({
+        return await this.dao.insert({
             'table': 'script_update',
             params: {
                 'id_script_processed': scriptId,
@@ -39,7 +39,7 @@ export class UpdateScriptService extends ServiceScript<ITriggers, IState, 'updat
     }
 
     private async getScript(serieId: number) {
-        return await rootRep.fetch({
+        return await this.dao.fetch({
             'table': 'scripts_processed',
                 'limit': 1,
                 'offset': 0,

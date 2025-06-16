@@ -10,6 +10,7 @@ import { biteRequest } from "../service-bite/serviceBite";
 import { BiteStatusWrap } from "@reflexio/core-v1/lib/types";
 import { RequestTriggers } from "../service-bite/types";
 import { rootRep } from "../repository";
+import { SateTEstResultScript } from "./services/SaveTestResult";
 
 // load init serie on app start 
 // trigger in controller load serie // save result to state with requestId
@@ -28,6 +29,8 @@ export interface CreateWordStampInput {
 }
 
 export interface IWordStampTriggers {
+   createQuiz: BiteStatusWrap<RequestTriggers<null, null>>;
+   saveQuizResult: BiteStatusWrap<RequestTriggers<null, null>>;
    saveWordStamp: BiteStatusWrap<RequestTriggers<{sessionId: string, input: CreateWordStampInput}, number>>;
    loadGroupedWordStamps: BiteStatusWrap<RequestTriggers<{sessionId: string},Array<_LoadGroupedWordStamps>>>;
    loadChaptersOfStamps: BiteStatusWrap<RequestTriggers< Array<number>,Array<_Chapters>>>
@@ -36,6 +39,8 @@ export interface IWordStampTriggers {
 
 
 export const wordStampsSlice = Slice<IWordStampTriggers,  any, ITriggers, IState>('wordStamp', {
+    'saveQuizResult': biteRequest('saveQuizResult', SateTEstResultScript, {dao: rootRep}),
+    'createQuiz': biteRequest('createQuiz', null, {dao: rootRep}),
     'loadGroupedWordStamps': biteRequest('loadGroupedWordStamps', LoadGroupedWordStamps, {dao: rootRep}),
     saveWordStamp: biteRequest('saveWordStamp', SaveWordStampService, {dao: rootRep}),
     'loadChaptersOfStamps': biteRequest('loadChaptersOfStamps', LoadChaptersOfStamps, {dao: rootRep}),

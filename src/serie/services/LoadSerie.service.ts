@@ -1,5 +1,4 @@
 import { ScriptInitArgsType, ScriptOptsType } from "@reflexio/reflexio-on-redux/lib/types";
-import { rootRep, rootRepOpen } from "../../repository";
 import { IState, ITriggers } from "../../_redux/types";
 import { ISerireTriggers } from "../serie.module";
 import { join } from "path";
@@ -19,7 +18,7 @@ export class LoadSerieService extends ServiceScript<ITriggers, IState, 'loadSeri
 
 
     private async loadScriptUpdate(scriptId: number): Promise<Array<_ScriptUpdate>> {
-        return await rootRep.fetch({
+        return await this.dao.fetch({
             'table': 'script_update',
             where: {
                 'id_script_processed': scriptId
@@ -31,7 +30,7 @@ export class LoadSerieService extends ServiceScript<ITriggers, IState, 'loadSeri
     }
 
     private async loadSerieWithScript(serieId: number): Promise<Array<_Series & {scripts: Array<_ScriptsProcessed>}>> {
-        return await rootRep.fetch({
+        return await this.dao.fetch({
             'table': 'series',
             'limit': 1,
             'offset': 0, 
